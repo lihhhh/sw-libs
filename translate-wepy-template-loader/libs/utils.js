@@ -2,6 +2,16 @@
 
 // var parse5 = require("parse5");
 var posthtml = require("posthtml");
+var html5tags = [
+	'a','abbr','address','area','article','aside','audio','b','base','bdi','bdo','blockquote',
+	'body','br','button','canvas','caption','cite','code','col','colgroup','datalist','dd','del','details','dfn',
+	'dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form',
+	'h1','h2','h3','h4','h5','h6','head','header','hr','html','i','iframe','img','input','ins','kbd','keygen',
+	'label','legend','li','link','main','map','mark','menu','menuitem','meta','meter','nav','noscript','object',
+	'ol','optgroup','option','output','p','param','pre','progress','q','rp','rt','ruby','s','samp',
+	'script','section','select','small','source','span','strong','style','sub','summary','sup',
+	'table','tbody','td','textarea','tfoot','th','thead','time','title','tr','track','u','ul','var','video','wbr'
+];
 
 var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image'];
 
@@ -151,37 +161,33 @@ function parse(tree) {
 	return tree;
 }
 function parsehtml(html) {
+	html = html.replace(/<([a-zA-Z]+)[^>]*\/>/g,function(all,tagName){
+		if(html5tags.indexOf(tagName)==-1){
+			var out = `${all.replace('/','')}</${tagName}>`;
+			return out;
+		}
+		return all;
+	})
 	const result = posthtml()
 		.use(parse)
 		// .use(require('posthtml-custom-elements')())
-		.process(html, { sync: true }).html
+		.process(html, { 
+			sync: true,
+			directives: [
+				{ name: 'wepy-image', start: '<', end: '/>' },
+				{ name: 'image', start: '<', end: '/>' }
+			]
+		 }).html
 	return result;
 }
 
 
 var el = `
-<view class="content">
-    <view class="swiper-tab {{ showshadow && 'shadow'}}">
-      <view class="swiper-tab-list {{type=='product' ? 'active' : ''}}" @tap="swich('product')">产品分类
-      </view>
-      <view class="swiper-tab-list {{type=='brand' ? 'active' : ''}}" @tap="swich('brand')">品牌分类
-      </view>
-    </view>
-    <view class="line {{slidline?'slided':''}}"></view>
-    <view hidden="{{type=='brand'}}" class="product_container">
-      <scroll-view scroll-y height="{{windowHeight-40}}px" bindscroll="slide" class="product_scroll" enable-back-to-top="true">
-        <view class="list_content">
-          <view class="list" wx:for="{{catelist}}" wx:for-item="items" wx:key="index" wx:if="{{items.sub_cat.length>0}}">
-            <image class="item_img" src="{{items.image?url+items.image:''}}" data-id="{{items.id}}" data-filter="{{items.name}}" data-title="{{items.name}}" @tap="navigatorto" />
-            <view class="item_list">
-              <view class="item_name of-hidden" wx:for="{{items.sub_cat}}" wx:for-item="item" data-id="{{item.id}}" data-filter="{{item.name}}" data-title="{{items.name}}" @tap="navigatorto" wx:key="item.id">{{item.name}}</view>
-            </view>
-          </view>
-        </view>
-      </scroll-view>
-    </view>
-    <!-- <brandchoose hidden="{{type=='product'}}" :imgUrl.sync="url" @slide.user="slide_brand"></brandchoose> -->
-  </view>
+<div>
+<image src="123" />
+<img />
+<div></div>
+</div>
 `
 
 parsehtml(el)
