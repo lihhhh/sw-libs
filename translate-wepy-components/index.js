@@ -10,7 +10,7 @@ import navigator from './components/navigator.vue';
 
 const before = 'wepy-';
 
-module.exports = {
+export default {
     install:function(Vue){
         Vue.component(before+'image',image);
         Vue.component(before+'navigator',navigator);
