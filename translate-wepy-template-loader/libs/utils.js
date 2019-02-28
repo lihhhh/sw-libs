@@ -163,7 +163,7 @@ function parse(tree) {
 function parsehtml(html) {
 	html = html.replace(/<([a-zA-Z]+)[^>]*\/>/g,function(all,tagName){
 		if(html5tags.indexOf(tagName)==-1){
-			var out = `${all.replace('/','')}</${tagName}>`;
+			var out = `${all.replace('/>','>')}</${tagName}>`;
 			return out;
 		}
 		return all;
@@ -183,11 +183,7 @@ function parsehtml(html) {
 
 
 var el = `
-<div>
-<image src="123" />
-<img />
-<div></div>
-</div>
+<image class="unread-statu" src="../images/icon_tzqp_fill@3x.png" wx:if="{{unreadCount}}" />
 `
 
 parsehtml(el)
