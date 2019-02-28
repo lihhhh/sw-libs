@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "parse5": "^5.1.0"
+    "posthtml": "^0.11.3"
   }
 }
