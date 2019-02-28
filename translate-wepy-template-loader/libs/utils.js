@@ -132,7 +132,7 @@ function parsehtml(html) {
 
 	html = parse5.serialize(el);
 
-	console.log(html)
+	// console.log(html)
 	return html;
 }
 
