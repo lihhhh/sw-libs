@@ -20,6 +20,7 @@ function parsehtml(html) {
 	var el = parse5.parseFragment(html);
 	deep(el, function (it) {
 		it.attrs && it.attrs.map(attr => {
+			debugger
 			switch (attr.name) {
 				case 'wx:for':
 					var value = attr.value.replace(/\{\{(.*?)\}\}/, '$1')
@@ -138,7 +139,7 @@ function parsehtml(html) {
 
 
 var el = `
-<view style="height:{{height+100}}rpx"></view>
+<orderItem :imgurl.sync="imgurl" :orderList.sync="orderList"></orderItem>
 `
 
 parsehtml(el)
