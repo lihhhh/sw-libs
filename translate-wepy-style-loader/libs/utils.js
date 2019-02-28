@@ -21,16 +21,17 @@ function deep(rows, cb) {
 
 /* 去除注释 */
 function removeNote(style) {
-	debugger
-	style = style.replace(/:\s*\/\//gm, ':##')
-	// 去除注释   
-	style = style.replace(/\/\*[\s\S]*?\*\//gm, '').replace(/\/\/.*$/gm, '').replace(/:##/gm, '://')
+	// style = style.replace(/:\s*\/\//gm, ':##')
+	// // 去除注释   
+	// style = style.replace(/\/+\*[\s\S]*?\*\//gm, '').replace(/([^A-Za-z\d'"])\/\/.*$/gm, '$1').replace(/:##/gm, '://')
 	return style;
 }
 
 function parsestyle(style) {
-	style = removeNote(style)
+	// style = removeNote(style)
+	// debugger
 	var ast = postcss.parse(style);
+	
 	ast.walkRules(rule => {
 		var selectorArr = rule.selector.split(/([,>+\s])/);
 		selectorArr = selectorArr.map(it => {
@@ -56,18 +57,16 @@ function parsestyle(style) {
 			}
 		});
 	});
-	debugger
+	
 	return ast.toString();
 }
 
 
 var el = `
-.red {
-	color:red;
-}
+hIiISIhnwAf///+P/wv/B/8D/j/+A/3H/Zf9P/0v/OP4F/fXgwOC94Lzgu+C44K/gp
 `;
 
-// parsestyle(el)
+parsestyle(el)
 
 module.exports = {
 	parsestyle: parsestyle
