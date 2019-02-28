@@ -19,7 +19,16 @@ function deep(rows, cb) {
 	}
 }
 
+/* 去除注释 */
+function removeNote(style) {
+	style = _d.data.replace(/:\s*\/\//gm, ':##')
+	// 去除注释   
+	style = json.replace(/\/\*[\s\S]*?\*\//gm, '').replace(/\/\/.*$/gm, '').replace(/:##/gm, '://')
+	return style;
+}
+
 function parsestyle(style) {
+	style = removeNote(style)
 	var ast = postcss.parse(style);
 	ast.walkRules(rule => {
 		var selectorArr = rule.selector.split(/([,>+\s])/);
