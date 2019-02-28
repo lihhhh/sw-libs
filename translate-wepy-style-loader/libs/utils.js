@@ -21,9 +21,10 @@ function deep(rows, cb) {
 
 /* 去除注释 */
 function removeNote(style) {
-	style = _d.data.replace(/:\s*\/\//gm, ':##')
+	debugger
+	style = style.replace(/:\s*\/\//gm, ':##')
 	// 去除注释   
-	style = json.replace(/\/\*[\s\S]*?\*\//gm, '').replace(/\/\/.*$/gm, '').replace(/:##/gm, '://')
+	style = style.replace(/\/\*[\s\S]*?\*\//gm, '').replace(/\/\/.*$/gm, '').replace(/:##/gm, '://')
 	return style;
 }
 
