@@ -26,7 +26,7 @@ export default {
         var that = this;
         wx.wxRequest = wx.request;
         wx.request = function (options) {
-            var defer = $q.defer();
+            var defer = q.defer();
             var success = options.success;
             options.success = function (res) {
                 success && success(res)
