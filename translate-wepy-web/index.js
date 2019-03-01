@@ -58,7 +58,9 @@ export default {
             hideLoading:function(){},
             showShareMenu:function(){},
         })
+        // wx = wepy = wepyWeb;
         Object.assign(wx, wepyWeb)
+        Object.assign(wepy, wx)
     },
     install: function (Vue) {
         this.init()

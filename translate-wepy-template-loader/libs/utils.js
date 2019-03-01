@@ -13,13 +13,14 @@ var html5tags = [
 	'table','tbody','td','textarea','tfoot','th','thead','time','title','tr','track','u','ul','var','video','wbr'
 ];
 
-var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image'];
+var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image' , 'repeat'];
 
 function attrPase(attr, el) {
 	if(/^@/.test(attr.name)){
 		attr.name = attr.name.replace('.user','')
 	}
 	switch (attr.name) {
+		case 'for':
 		case 'wx:for':
 			var value = attr.value.replace(/\{\{(.*?)\}\}/, '$1')
 			var forItem = el.attrs.find(item => item.name == 'wx:for-item')
@@ -187,7 +188,7 @@ function parsehtml(html) {
 
 
 var el = `
-<view @ddd.user="111" wx:key="t{{index}}"></view>
+<repeat for="{{orderList}}" wx:key="index">55555555</repeat>
 `
 
 parsehtml(el)

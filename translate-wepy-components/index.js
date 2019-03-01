@@ -7,6 +7,7 @@ import swiper from './components/swiper.vue';
 import swiperItem from './components/swiper-item.vue';
 import image from './components/image.vue';
 import navigator from './components/navigator.vue';
+import repeat from './components/repeat.vue';
 
 const before = 'wepy-';
 
@@ -19,5 +20,6 @@ export default {
         Vue.component(before+'text',text);
         Vue.component(before+'view',view);
         Vue.component(before+'scroll-view',scrollView);
+        Vue.component(before+'repeat',repeat);
     }
 }
