@@ -1,6 +1,8 @@
 
 import wepyWeb from 'wepy-web'
 import wepy from 'wepy'
+import q from 'q'
+import _ from 'lodash'
 
 function deep(arr,componentName,cb){
     var reg = new RegExp(`${componentName}$`);
@@ -34,8 +36,8 @@ export default {
 
             return defer.promise;
         }
-        that.$wx = {...Object.assign(wepy, wx)}
-        Object.assign(wepyWeb, wx, {
+        that.$wx = _.clone(_.assign(wepy, wx))
+        _.assign(wepyWeb, wx, {
             navigateTo: function (params) {
                 // 前面没斜杠加斜杠
                 if (/^[^\/]/.test(params.url)) {
@@ -59,12 +61,12 @@ export default {
             showShareMenu:function(){},
         })
         // wx = wepy = wepyWeb;
-        Object.assign(wx, wepyWeb)
-        Object.assign(wepy, wx)
+        _.assign(wx, wepyWeb)
+        _.assign(wepy, wx)
     },
     install: function (Vue) {
         this.init()
-        Object.assign(Vue.prototype,this.prototype)
+        _.assign(Vue.prototype,this.prototype)
     },
     prototype:{
         $apply: _.debounce(function () {
@@ -77,7 +79,7 @@ export default {
         }
     },
     addPrototype:function(prototypeObj){
-        this.prototype = {...this.prototype,...prototypeObj};
-        Object.assign(Vue.prototype,this.prototype)
+        this.prototype = _.assign(this.prototype,prototypeObj);
+        _.assign(Vue.prototype,this.prototype)
     }
 }
