@@ -19,7 +19,9 @@ function deep(arr,componentName,cb){
 }
 
 export default {
+    $wx:{},
     init: function () {
+        var that = this;
         wx.wxRequest = wx.request;
         wx.request = function (options) {
             var defer = $q.defer();
@@ -32,8 +34,8 @@ export default {
 
             return defer.promise;
         }
-        
-        Object.assign(wepy, wx, {
+        that.$wx = {...Object.assign(wepy, wx)}
+        Object.assign(wepyWeb, wx, {
             navigateTo: function (params) {
                 // 前面没斜杠加斜杠
                 if (/^[^\/]/.test(params.url)) {
@@ -45,16 +47,18 @@ export default {
                 window.$router.push({
                     path: params.url
                 })
-            }
+            },
+            request:function(params){
+                if(params.header){
+                    params.headers = params.header;
+                }
+                return that.$wx.request(params)
+            },
+            showLoading:function(){},
+            hideLoading:function(){},
+            showShareMenu:function(){},
         })
-        
-        Object.assign(wepyWeb, wx, {
-            navigateTo: function (params) {
-                window.$router.push({
-                    path: params.url
-                })
-            }
-        })
+        Object.assign(wx, wepyWeb)
     },
     install: function (Vue) {
         this.init()

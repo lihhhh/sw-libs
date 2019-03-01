@@ -16,6 +16,9 @@ var html5tags = [
 var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image'];
 
 function attrPase(attr, el) {
+	if(/^@/.test(attr.name)){
+		attr.name = attr.name.replace('.user','')
+	}
 	switch (attr.name) {
 		case 'wx:for':
 			var value = attr.value.replace(/\{\{(.*?)\}\}/, '$1')

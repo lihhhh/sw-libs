@@ -10,3 +10,4 @@ selenium-debug.log
 package-lock.json
 .DS_Store
 static/assets/images/test/
+sw-libs/
