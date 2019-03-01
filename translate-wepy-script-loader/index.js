@@ -46,9 +46,10 @@ module.exports = function (content, map, meta) {
 			debugger;
 			if (com) {
 				var _com = t.objectProperty(t.identifier("_com"), t.objectExpression([]));
-				com.value.properties.map(it => {
-					_com.value.properties.push(t.objectProperty(t.identifier(it.value.name), it.value));
-				});
+				// com.value.properties.map(it => {
+				// 	_com.value.properties.push(t.objectProperty(t.identifier(it.value.name), it.value));
+				// });
+				_com.value.properties = com.value.properties;
 				_data.value.properties.push(_com);
 			}
 

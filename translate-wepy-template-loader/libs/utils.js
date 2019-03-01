@@ -178,12 +178,16 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		 }).html
+		 debugger
 	return result;
 }
 
 
 var el = `
-<image class="unread-statu" src="../images/icon_tzqp_fill@3x.png" wx:if="{{unreadCount}}" />
+<view class="brands_item" wx:for="{{hotbrandlist}}" wx:key="{{item.id}}" data-hotid="{{item.id}}" data-hottitle="{{item.chinese_name!=null?item.chinese_name:item.english_name}}" @tap="toBrand">
+              <image class="item_img" mode="aspectFit" lazy-load="true" src="{{item.image&&imgUrl?imgUrl+item.image:''}}" />
+              <view class="item_name">{{item.chinese_name?item.chinese_name:item.english_name}}</view>
+            </view>
 `
 
 parsehtml(el)

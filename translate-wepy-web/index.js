@@ -2,6 +2,22 @@
 import wepyWeb from 'wepy-web'
 import wepy from 'wepy'
 
+function deep(arr,componentName,cb){
+    var reg = new RegExp(`${componentName}$`);
+    var _deep = function(_arr){
+        _arr.map(it=>{
+            if(reg.test(it.$vnode.tag)){
+                cb(it);
+            }
+            if(it.$children){
+                _deep(it.$children)
+            }
+        })
+    }
+    _deep(arr);
+    
+}
+
 export default {
     init: function () {
         wx.wxRequest = wx.request;
@@ -49,9 +65,9 @@ export default {
             this.$forceUpdate()
         }, 300),
         $invoke:function(componentName,methodName,params){
-            // debugger
-            this._data.$com[componentName].methods[methodName](params)
-            
+            deep(this.$children,componentName,function(com){
+                com[methodName](params)
+            })
         }
     },
     addPrototype:function(prototypeObj){
