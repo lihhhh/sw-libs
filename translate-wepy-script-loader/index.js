@@ -3,7 +3,14 @@ let traverse = require("babel-traverse").default;
 let generate = require("babel-generator").default;
 let t = require("@babel/types");
 
-module.exports = function (content, map, meta) {
+parse(`
+export default class extends wepy.app {
+	constructor(){
+
+	}
+}
+`);
+function parse(content, map, meta) {
 	var ast = babylon.parse(content, {
 		sourceType: 'module',
 		plugins: [
@@ -14,14 +21,13 @@ module.exports = function (content, map, meta) {
 	})
 
 
-
-
 	traverse(ast, {
 		ClassBody(path) {
 			var keyName = [
 				"data",
 				// "onLoad",
 				//   "onLaunch",
+				"constructor",
 				"onShow",
 				"onHide",
 				"onReady",
@@ -33,7 +39,7 @@ module.exports = function (content, map, meta) {
 				"props",
 				"created"
 			];
-
+			
 			var node = path.node;
 
 			// 没有data就添加  data={}
@@ -43,7 +49,7 @@ module.exports = function (content, map, meta) {
 				node.body.push(_data);
 			}
 			var com = node.body.find(it => it.key.name == "components");
-			debugger;
+			
 			if (com) {
 				var _com = t.objectProperty(t.identifier("_com"), t.objectExpression([]));
 				// com.value.properties.map(it => {
@@ -130,6 +136,7 @@ module.exports = function (content, map, meta) {
 		},
 		Identifier(path) {
 			var name = path.node.name;
+			
 			switch (path.node.name) {
 				// case 'onLoad':
 				// 	name = 'created';
@@ -158,6 +165,10 @@ module.exports = function (content, map, meta) {
 			path.node.name = name;
 		},
 		ClassMethod(path) {
+			if(path.node.key.name==='constructor'){
+				path.remove()
+				return;
+			}
 			// 转换a(){}  =>  a=function(){}
 			if (path.get("key").isIdentifier({ name: "data" })) return;
 			if (path.parentKey == "body") {
@@ -183,6 +194,7 @@ module.exports = function (content, map, meta) {
 	});
 
 	content = generate(ast, {}, content);
-
+debugger
 	return content.code;
 };
+module.exports = parse;
