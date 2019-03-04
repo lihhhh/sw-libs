@@ -194,7 +194,7 @@ function parse(content, map, meta) {
 	});
 
 	content = generate(ast, {}, content);
-debugger
+	
 	return content.code;
 };
 module.exports = parse;

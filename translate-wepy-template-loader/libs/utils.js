@@ -155,7 +155,8 @@ function parse(tree) {
 		}
 		switch (el.tag) {
 			case 'block':
-				el.tag = 'span';
+				el.tag = 'template';
+				delete el.attrs[':key'];
 				break;
 		}
 
@@ -182,13 +183,20 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		 }).html
-		 debugger
 	return result;
 }
 
 
 var el = `
-<repeat for="{{orderList}}" wx:key="index">55555555</repeat>
+<swiper class="home-top-swiper" bindchange="toSwiper" previous-margin="40rpx" indicator-color="rgba(255,255,255,0.5)" next-margin="40rpx" indicator-active-color="rgba(255,255,255,0.9)" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}"
+          duration="{{duration}}" circular="true">
+          <template  wx:for="{{block_1}}" wx:key="{{index}}">
+            <swiper-item @tap="goto_carouselinfo({{item.link_id}})">
+              <view class="img_mask {{item.id?'hidden_opt':''}}"></view>
+              <image mode="aspectFill" lazy-load="true" src="{{homeBaseUrl&&item.original?homeBaseUrl+item.original:''}}" class="slide-image" data-wpygotoadvert-a="{{item.advertUrl}}" data-index="{{index}}" bindload="imgload"></image>
+            </swiper-item>
+          </template>
+        </swiper>
 `
 
 parsehtml(el)
