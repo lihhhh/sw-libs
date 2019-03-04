@@ -17,9 +17,7 @@ export default {
   data() {
     return {
       swiperOption: {
-        // some swiper options/callbacks
-        // 所有的参数同 swiper 官方 api 参数
-        // ...
+        autoplay: true
       }
     };
   },

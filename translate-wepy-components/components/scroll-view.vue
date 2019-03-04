@@ -64,6 +64,7 @@ export default {
   },
   data() {
     return {
+      BScroll: {},
       scX: this.scrollX,
       scY: this.scrollY
     };
@@ -96,6 +97,17 @@ export default {
     //         this.$emit('scrolltolower');
     //     }
     // }
+  },
+  watch: {
+    scrollIntoView(value) {
+      if (this.scrollY) {
+        var offsetTop = this.$el.querySelector("#" + value).offsetTop;
+        this.BScroll.scrollTo(0, -offsetTop);
+      } else if (this.scrollX) {
+        var offsetLeft = this.$el.querySelector("#" + value).offsetLeft;
+        this.BScroll.scrollTo(-offsetLeft,0);
+      }
+    }
   },
   mounted() {
     var options = {

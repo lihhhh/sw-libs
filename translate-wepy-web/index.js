@@ -70,7 +70,6 @@ export default {
     },
     prototype:{
         $apply: _.debounce(function () {
-            // this._data = _.cloneDeep(this._data)
             this.$forceUpdate()
         }, 300),
         $invoke:function(componentName,methodName,params){

@@ -19,8 +19,8 @@ function attrPase(attr, el) {
 	if (/^@/.test(attr.name)) {
 		attr.name = attr.name.replace('.user', '')
 	}
-	if(/^bind/.test(attr.name)){
-		attr.name = attr.name.replace('bind','@')
+	if (/^bind/.test(attr.name)) {
+		attr.name = attr.name.replace('bind', '@')
 		attr.value = attr.value.replace(/[\{\}]/g, '')
 	}
 	switch (attr.name) {
@@ -29,6 +29,7 @@ function attrPase(attr, el) {
 			var value = attr.value.replace(/\{\{(.*?)\}\}/, '$1')
 			var forItem = el.attrs.find(item => item.name == 'wx:for-item')
 			var forIndex = el.attrs.find(item => item.name == 'wx:for-index')
+			debugger
 			var key = forItem ? forItem.value : 'item';
 			var index = forIndex ? forIndex.value : 'index';
 			attr.value = `(${key},${index}) in ${value}`;
@@ -41,7 +42,7 @@ function attrPase(attr, el) {
 		case 'wx:if':
 			if (/\{\{/.test(attr.value)) {
 				attr.value = attr.value.replace(/[\{\}]/g, '')
-				attr.name = 'v-if';
+				attr.name = 'v-show';
 			}
 			break;
 		case 'hidden':
@@ -57,6 +58,14 @@ function attrPase(attr, el) {
 				attr.name = attr.name + '.native'
 			}
 			break;
+		case '@touchstart.stop':
+		case '@touchend.stop':
+		case '@touchmove.stop':
+			attr.value = attr.value.replace(/[\{\}]/g, '')
+			if (tags.indexOf(el.tag) >= 0) {
+				attr.name = attr.name + '.native'
+			}
+			break;
 		case '@tap':
 			attr.value = attr.value.replace(/[\{\}]/g, '')
 			attr.name = '@click';
@@ -67,7 +76,7 @@ function attrPase(attr, el) {
 		case 'bindload':
 			attr.value = attr.value.replace(/[\{\}]/g, '')
 			attr.name = '@load';
-			break; 
+			break;
 		case 'src':
 			if (/^http/.test(attr.value)) return;
 			attr.name = ':src';
@@ -184,19 +193,17 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		}).html
-		debugger
+	debugger
 	return result;
 }
 
 
 var el = `
-<view>
-    1111
-    <loading hidden="{{is_empty||goodsinfo.length > 0||no_login}}" />
-    <view class="content" wx:if="{{goodsinfo.length > 0}}">
-      
+<view class="nav_quick_tool" @touchend.stop="touchend" @touchstart.stop="touchstart" @touchmove.stop="moveQuick">
+      <view wx:for="{{navs}}" wx:if="{{DataSort[nav]}}" wx:for-item="nav" wx:key="n{{index}}" class="nav_quick }}">
+        {{nav}}
+      </view>
     </view>
-  </view>
 `
 
 parsehtml(el)
