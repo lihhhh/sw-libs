@@ -3,21 +3,25 @@
 // var parse5 = require("parse5");
 var posthtml = require("posthtml");
 var html5tags = [
-	'a','abbr','address','area','article','aside','audio','b','base','bdi','bdo','blockquote',
-	'body','br','button','canvas','caption','cite','code','col','colgroup','datalist','dd','del','details','dfn',
-	'dialog','div','dl','dt','em','embed','fieldset','figcaption','figure','footer','form',
-	'h1','h2','h3','h4','h5','h6','head','header','hr','html','i','iframe','img','input','ins','kbd','keygen',
-	'label','legend','li','link','main','map','mark','menu','menuitem','meta','meter','nav','noscript','object',
-	'ol','optgroup','option','output','p','param','pre','progress','q','rp','rt','ruby','s','samp',
-	'script','section','select','small','source','span','strong','style','sub','summary','sup',
-	'table','tbody','td','textarea','tfoot','th','thead','time','title','tr','track','u','ul','var','video','wbr'
+	'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'blockquote',
+	'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details', 'dfn',
+	'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form',
+	'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen',
+	'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noscript', 'object',
+	'ol', 'optgroup', 'option', 'output', 'p', 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp',
+	'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup',
+	'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 ];
 
-var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image' , 'repeat'];
+var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat'];
 
 function attrPase(attr, el) {
-	if(/^@/.test(attr.name)){
-		attr.name = attr.name.replace('.user','')
+	if (/^@/.test(attr.name)) {
+		attr.name = attr.name.replace('.user', '')
+	}
+	if(/^bind/.test(attr.name)){
+		attr.name = attr.name.replace('bind','@')
+		attr.value = attr.value.replace(/[\{\}]/g, '')
 	}
 	switch (attr.name) {
 		case 'for':
@@ -63,11 +67,7 @@ function attrPase(attr, el) {
 		case 'bindload':
 			attr.value = attr.value.replace(/[\{\}]/g, '')
 			attr.name = '@load';
-			break;
-		case 'bindscroll':
-			attr.value = attr.value.replace(/[\{\}]/g, '')
-			attr.name = '@scroll';
-			break;
+			break; 
 		case 'src':
 			if (/^http/.test(attr.value)) return;
 			attr.name = ':src';
@@ -166,9 +166,9 @@ function parse(tree) {
 	return tree;
 }
 function parsehtml(html) {
-	html = html.replace(/<([a-zA-Z]+)[^>]*\/>/g,function(all,tagName){
-		if(html5tags.indexOf(tagName)==-1){
-			var out = `${all.replace('/>','>')}</${tagName}>`;
+	html = html.replace(/<([a-zA-Z]+)[^>]*\/>/g, function (all, tagName) {
+		if (html5tags.indexOf(tagName) == -1) {
+			var out = `${all.replace('/>', '>')}</${tagName}>`;
 			return out;
 		}
 		return all;
@@ -176,13 +176,13 @@ function parsehtml(html) {
 	const result = posthtml()
 		.use(parse)
 		// .use(require('posthtml-custom-elements')())
-		.process(html, { 
+		.process(html, {
 			sync: true,
 			directives: [
 				{ name: 'wepy-image', start: '<', end: '/>' },
 				{ name: 'image', start: '<', end: '/>' }
 			]
-		 }).html
+		}).html
 	return result;
 }
 
