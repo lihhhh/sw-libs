@@ -166,7 +166,8 @@ function parse(tree) {
 	return tree;
 }
 function parsehtml(html) {
-	html = html.replace(/<([a-zA-Z]+)[^>]*\/>/g, function (all, tagName) {
+	// html = '<div>'+html+'</div>';
+	html = html.replace(/<([a-zA-Z\-_]+).*\/>/g, function (all, tagName) {
 		if (html5tags.indexOf(tagName) == -1) {
 			var out = `${all.replace('/>', '>')}</${tagName}>`;
 			return out;
@@ -183,20 +184,19 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		}).html
+		debugger
 	return result;
 }
 
 
 var el = `
-<swiper class="home-top-swiper" bindchange="toSwiper" previous-margin="40rpx" indicator-color="rgba(255,255,255,0.5)" next-margin="40rpx" indicator-active-color="rgba(255,255,255,0.9)" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}"
-          duration="{{duration}}" circular="true">
-          <template  wx:for="{{block_1}}" wx:key="{{index}}">
-            <swiper-item @tap="goto_carouselinfo({{item.link_id}})">
-              <view class="img_mask {{item.id?'hidden_opt':''}}"></view>
-              <image mode="aspectFill" lazy-load="true" src="{{homeBaseUrl&&item.original?homeBaseUrl+item.original:''}}" class="slide-image" data-wpygotoadvert-a="{{item.advertUrl}}" data-index="{{index}}" bindload="imgload"></image>
-            </swiper-item>
-          </template>
-        </swiper>
+<view>
+    1111
+    <loading hidden="{{is_empty||goodsinfo.length > 0||no_login}}" />
+    <view class="content" wx:if="{{goodsinfo.length > 0}}">
+      
+    </view>
+  </view>
 `
 
 parsehtml(el)

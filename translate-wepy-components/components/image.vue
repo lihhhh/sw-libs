@@ -102,7 +102,6 @@ export default {
             }
             this.handleWidthFix({ height, width });
             var dom = this.$refs['image'];
-            console.log(dom.dataset)
             // debugger
             evt.currentTarget =dom;
             // evt.currentTarget = {
