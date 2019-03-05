@@ -3,6 +3,7 @@
     ref="element"
     class="wepy-scroll-view"
     :style="getStyle"
+    @touchstart="touchStart"
   >
     <div>
       <slot></slot>
@@ -63,10 +64,14 @@ export default {
     ...TABLE_OPTIONS
   },
   data() {
+    var scX = this.scrollX;
+    scX = scX===''?true:scX;
+    var scY = this.scrollY;
+    scY = scY===''?true:scY;
     return {
       BScroll: {},
-      scX: this.scrollX,
-      scY: this.scrollY
+      scX: scX,
+      scY: scY
     };
   },
   computed: {
@@ -81,29 +86,17 @@ export default {
     }
   },
   methods: {
-    // scroll (e) {
-    //     let elem = e.srcElement || e.currentTarget;
-    //     let evt = new event('system', this.$parent.$wepy, e.type);
-    //     evt.$transfor(e);
-    //     this.$parent.$event = evt;
-    //     let options = merge(elem, TABLE_OPTIONS);
-    //     this.$emit('scroll');
-    //     let upper = options['scroll-x'] ? elem.scrollLeft : elem.scrollTop;
-    //     let lower = options['scroll-x'] ? (elem.scrollWidth - elem.scrollLeft - elem.clientWidth) : (elem.scrollHeight - elem.scrollTop - elem.clientHeight);
-    //     if (upper <= options['upper-threshold']) {
-    //         this.$emit('scrolltoupper');
-    //     }
-    //     if (lower <= options['lower-threshold']) {
-    //         this.$emit('scrolltolower');
-    //     }
-    // }
+    touchStart(){
+      this.BScroll.refresh()
+    }
   },
   watch: {
     scrollIntoView(value) {
-      if (this.scrollY||this.scrollY==='') {
+      this.BScroll.refresh()
+      if (this.scY) {
         var offsetTop = this.$el.querySelector("#" + value).offsetTop;
         this.BScroll.scrollTo(0, -offsetTop,300);
-      } else if (this.scrollX||this.scrollX==='') {
+      } else if (this.scX) {
         var offsetLeft = this.$el.querySelector("#" + value).offsetLeft;
         this.BScroll.scrollTo(-offsetLeft,0,300);
       }
@@ -117,12 +110,13 @@ export default {
       mouseWheel: true,
       pullUpLoad: true
     };
-    if (this.scrollX) {
+    if (this.scX) {
       options.scrollX = true;
     }
-    if (this.scrollY) {
+    if (this.scY) {
       options.scrollY = true;
     }
+    
     this.BScroll = new BScroll(this.$refs["element"], options);
 
     this.BScroll.on("scroll", e => {

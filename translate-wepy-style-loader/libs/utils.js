@@ -12,12 +12,10 @@ function removeNote(style) {
 	
 	// 特殊注释  /* @web { color:red; } */
 	style = style.replace(/\/\*\s*@web.*?\{([\s\S]*?)\}.*?\*\//gm,function(all,$1){
-		debugger
 		return $1;
 	})
 	// 特殊注释  /* @web  color:red; */
 	style = style.replace(/\/\*\s*@web([\s\S]*?)\*\//gm,function(all,$1){
-		debugger
 		return $1;
 	})
 	// 特殊注释  // @web color:red; 
@@ -31,7 +29,6 @@ function removeNote(style) {
 
 function parsestyle(style) {
 	style = removeNote(style)
-	debugger
 	
 	var ast = postcss.parse(style);
 	ast.walkRules(rule => {

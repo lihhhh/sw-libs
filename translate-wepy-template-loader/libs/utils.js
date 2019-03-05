@@ -29,7 +29,7 @@ function attrPase(attr, el) {
 			var value = attr.value.replace(/\{\{(.*?)\}\}/, '$1')
 			var forItem = el.attrs.find(item => item.name == 'wx:for-item')
 			var forIndex = el.attrs.find(item => item.name == 'wx:for-index')
-			debugger
+			
 			var key = forItem ? forItem.value : 'item';
 			var index = forIndex ? forIndex.value : 'index';
 			attr.value = `(${key},${index}) in ${value}`;
@@ -193,7 +193,7 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		}).html
-	debugger
+		
 	return result;
 }
 
