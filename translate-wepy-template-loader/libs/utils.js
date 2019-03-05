@@ -15,6 +15,17 @@ var html5tags = [
 
 var tags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat'];
 
+
+function getPageSpace(resourcePath) {
+	var pageClass;
+	if (resourcePath && /[\/\\]src[\/\\]pages[\/\\]/.test(resourcePath)) {
+		resourcePath = resourcePath.replace('.wpy','')
+		var resourcePathArr = resourcePath.split(/[\/\\]src[\/\\]/);
+		pageClass = resourcePathArr[1].replace(/[\/\\]/, '-') + '-page-space';
+	}
+	return pageClass;
+}
+
 function attrPase(attr, el) {
 	if (/^@/.test(attr.name)) {
 		attr.name = attr.name.replace('.user', '')
@@ -182,12 +193,12 @@ function parse(tree) {
 	return tree;
 }
 function parsehtml(html) {
-	if(this.resourcePath&&/[\/\\]src[\/\\]pages[\/\\]/.test(this.resourcePath)){
-		var resourcePathArr = this.resourcePath.split(/[\/\\]src[\/\\]/);
-		var pageClass = resourcePathArr[1].replace(/[\/\\]/,'-');
+	var pageClass = getPageSpace(this.resourcePath)
+	if (pageClass) {
 		html = `<view class="${pageClass}">\r\n${html}</view>\r\n`;
 	}
-	
+
+
 	html = html.replace(/<([a-zA-Z\-_]+).*\/>/g, function (all, tagName) {
 		if (html5tags.indexOf(tagName) == -1) {
 			var out = `${all.replace('/>', '>')}</${tagName}>`;
@@ -205,7 +216,7 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		}).html
-		
+
 	return result;
 }
 
