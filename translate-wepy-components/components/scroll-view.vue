@@ -100,12 +100,12 @@ export default {
   },
   watch: {
     scrollIntoView(value) {
-      if (this.scrollY) {
+      if (this.scrollY||this.scrollY==='') {
         var offsetTop = this.$el.querySelector("#" + value).offsetTop;
-        this.BScroll.scrollTo(0, -offsetTop);
-      } else if (this.scrollX) {
+        this.BScroll.scrollTo(0, -offsetTop,300);
+      } else if (this.scrollX||this.scrollX==='') {
         var offsetLeft = this.$el.querySelector("#" + value).offsetLeft;
-        this.BScroll.scrollTo(-offsetLeft,0);
+        this.BScroll.scrollTo(-offsetLeft,0,300);
       }
     }
   },
