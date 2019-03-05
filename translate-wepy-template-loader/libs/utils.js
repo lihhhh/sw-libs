@@ -29,7 +29,7 @@ function attrPase(attr, el) {
 			var value = attr.value.replace(/\{\{(.*?)\}\}/, '$1')
 			var forItem = el.attrs.find(item => item.name == 'wx:for-item')
 			var forIndex = el.attrs.find(item => item.name == 'wx:for-index')
-			
+
 			var key = forItem ? forItem.value : 'item';
 			var index = forIndex ? forIndex.value : 'index';
 			attr.value = `(${key},${index}) in ${value}`;
@@ -161,6 +161,13 @@ function parse(tree) {
 		if (el.tag == 'img' && Object.keys(el.attrs || {}).some(it => el.name == 'mode')) el.tag = 'image';
 		if (tags.indexOf(el.tag) >= 0) {
 			el.tag = 'wepy-' + el.tag;
+
+			// 添加与标签名同名的class
+			el.attrs = el.attrs || {};
+			el.attrs.class = el.attrs.class || '';
+			if (el.attrs.class.indexOf(el.tag) === -1) {
+				el.attrs.class += ' ' + el.tag;
+			}
 		}
 		switch (el.tag) {
 			case 'block':
@@ -175,7 +182,12 @@ function parse(tree) {
 	return tree;
 }
 function parsehtml(html) {
-	// html = '<div>'+html+'</div>';
+	if(this.resourcePath&&/[\/\\]src[\/\\]pages[\/\\]/.test(this.resourcePath)){
+		var resourcePathArr = this.resourcePath.split(/[\/\\]src[\/\\]/);
+		var pageClass = resourcePathArr[1].replace(/[\/\\]/,'-');
+		html = `<view class="${pageClass}">\r\n${html}</view>\r\n`;
+	}
+	
 	html = html.replace(/<([a-zA-Z\-_]+).*\/>/g, function (all, tagName) {
 		if (html5tags.indexOf(tagName) == -1) {
 			var out = `${all.replace('/>', '>')}</${tagName}>`;

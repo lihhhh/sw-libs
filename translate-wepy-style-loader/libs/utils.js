@@ -56,15 +56,40 @@ function parsestyle(style) {
 			}
 		});
 	});
-	// console.log(ast.toString())
+	
 	return ast.toString();
 }
 
 
-var el = `
-/* @web color:red; */
-/* @web { color:red; } */
-`;
+// var el = `
+// .sw_input {
+// 	height: 100%;
+// 	width: 100%;
+// 	.sw-input-placeholder {
+// 	  font-size: 26rpx;
+// 	  color: #888;
+// 	}
+// 	input {
+// 	  /* @web border:none; */
+// 	  height: 100%;
+// 	  width: 100%;
+// 	  background: rgba(249, 249, 249, 0.8);
+// 	  padding: 4rpx 20rpx;
+// 	}
+// 	/* @web {
+// 		input:focus {
+// 			outline: none;
+// 		  }
+// 	} */
+// 	textarea {
+// 	  height: 100%;
+// 	  width: 100%;
+// 	  box-sizing: border-box;
+// 	  padding: 10rpx 20rpx;
+// 	  background: rgba(249, 249, 249, 0.8);
+// 	}
+//   }
+// `;
 
 // parsestyle(el)
 

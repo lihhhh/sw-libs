@@ -161,8 +161,10 @@ export default {
 
 <style lang='less'>
 .wepy-image {
-    width: 300px;
-    height: 225px;
+    width: 100%;
+    height: 100%;
+    // width: 300px;
+    // height: 225px;
     overflow: hidden;
     background-repeat: no-repeat;
     background-position: center center;
