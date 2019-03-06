@@ -56,6 +56,13 @@ export default {
             },
             hideShareMenu: function (options) {
             },
+            getUpdateManager:function(){
+                return {
+                    onCheckForUpdate:function(cb){},
+                    onUpdateReady:function(cb){},
+                    applyUpdate:function(cb){}
+                };
+            }
         };
     },
     init: function () {

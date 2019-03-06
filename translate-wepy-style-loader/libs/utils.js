@@ -5,6 +5,15 @@ const translateTags = {
 	view: "div",
 	text: "span"
 };
+function getPageSpace(resourcePath) {
+	var pageClass;
+	if (resourcePath && /[\/\\]src[\/\\]pages[\/\\]/.test(resourcePath)) {
+		resourcePath = resourcePath.replace('.wpy','')
+		var resourcePathArr = resourcePath.split(/[\/\\]src[\/\\]/);
+		pageClass = resourcePathArr[1].replace(/[\/\\]/, '-') + '-space';
+	}
+	return pageClass;
+}
 
 /* 去除注释 */
 function removeNote(style) {
@@ -32,7 +41,12 @@ function parsestyle(style) {
 	
 	var ast = postcss.parse(style);
 	ast.walkRules(rule => {
-		var selectorArr = rule.selector.split(/([,>+\s])/);
+		var pageClass = getPageSpace(this.resourcePath)
+		if(pageClass){
+			rule.selector = '.'+pageClass+' '+rule.selector;
+		}
+		
+		var selectorArr = rule.selector.split(/([,>\+\s])/);
 		selectorArr = selectorArr.map(it => {
 			if (translateTags[it]) {
 				return translateTags[it];
@@ -56,7 +70,7 @@ function parsestyle(style) {
 			}
 		});
 	});
-	
+	debugger
 	return ast.toString();
 }
 
