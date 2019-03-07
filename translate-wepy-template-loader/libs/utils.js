@@ -172,7 +172,7 @@ function parse(tree) {
 		if (el.tag == 'img' && Object.keys(el.attrs || {}).some(it => el.name == 'mode')) el.tag = 'image';
 		if (tags.indexOf(el.tag) >= 0) {
 			el.tag = 'wepy-' + el.tag;
-
+			
 			// 添加与标签名同名的class
 			el.attrs = el.attrs || {};
 			el.attrs.class = el.attrs.class || '';
@@ -216,17 +216,13 @@ function parsehtml(html) {
 				{ name: 'image', start: '<', end: '/>' }
 			]
 		}).html
-
+		debugger
 	return result;
 }
 
 
 var el = `
-<view class="nav_quick_tool" @touchend.stop="touchend" @touchstart.stop="touchstart" @touchmove.stop="moveQuick">
-      <view wx:for="{{navs}}" wx:if="{{DataSort[nav]}}" wx:for-item="nav" wx:key="n{{index}}" class="nav_quick }}">
-        {{nav}}
-      </view>
-    </view>
+<wepy-image :src="src" :mode="mode"></wepy-image>
 `
 
 parsehtml(el)

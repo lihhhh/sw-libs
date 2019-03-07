@@ -21,31 +21,7 @@ const template = `
 `;
 
 const appStyle = `
-    #web-main {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100vh;
-        padding-bottom: 52px;
-        .view-box {
-            position: relative;
-            flex: 1;
-            overflow-y: scroll;
-        }
-        .tabbar-box {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 52px;
-            // background: pink;
-        }
-    }
-    body {
-        margin: 0;
-        padding: 0;
-        background: white;
-    }
+    
 `;
 
 function _appHandle(content) {

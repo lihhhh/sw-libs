@@ -1,10 +1,9 @@
 
 
 var postcss = require("postcss");
-const translateTags = {
-	view: "div",
-	text: "span"
-};
+
+var translateTags = ['view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat'];
+
 function getPageSpace(resourcePath) {
 	var pageClass;
 	if (resourcePath && /[\/\\]src[\/\\]pages[\/\\]/.test(resourcePath)) {
@@ -46,10 +45,10 @@ function parsestyle(style) {
 			rule.selector = '.'+pageClass+' '+rule.selector;
 		}
 		
-		var selectorArr = rule.selector.split(/([,>\+\s])/);
+		var selectorArr = rule.selector.split(/([,>\+\s]+)/);
 		selectorArr = selectorArr.map(it => {
-			if (translateTags[it]) {
-				return translateTags[it];
+			if (translateTags.some(item=>item==it)) {
+				return ".wepy-"+it;
 			}
 			return it;
 		});
@@ -70,42 +69,23 @@ function parsestyle(style) {
 			}
 		});
 	});
-	debugger
+	
 	return ast.toString();
 }
 
 
-// var el = `
-// .sw_input {
-// 	height: 100%;
-// 	width: 100%;
-// 	.sw-input-placeholder {
-// 	  font-size: 26rpx;
-// 	  color: #888;
-// 	}
-// 	input {
-// 	  /* @web border:none; */
-// 	  height: 100%;
-// 	  width: 100%;
-// 	  background: rgba(249, 249, 249, 0.8);
-// 	  padding: 4rpx 20rpx;
-// 	}
-// 	/* @web {
-// 		input:focus {
-// 			outline: none;
-// 		  }
-// 	} */
-// 	textarea {
-// 	  height: 100%;
-// 	  width: 100%;
-// 	  box-sizing: border-box;
-// 	  padding: 10rpx 20rpx;
-// 	  background: rgba(249, 249, 249, 0.8);
-// 	}
-//   }
-// `;
+var el = `
+.sw_input {
+	height: 100%;
+	width: 100%;
+	
+	image {
+		color:100px;
+	}
+  }
+`;
 
-// parsestyle(el)
+parsestyle(el)
 
 module.exports = {
 	parsestyle: parsestyle

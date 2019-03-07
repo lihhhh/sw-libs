@@ -10,7 +10,7 @@ hover-start-time	Number	50	按住后多久出现点击态，单位毫秒
 hover-stay-time	Number	400	手指松开后点击态保留时间，单位毫秒
 -->
 <template>
-    <div class="wepy_view"
+    <div
          :class="isHover ? hoverClass : ''"
          @touchstart="touchstart"
          @touchend="touchend">
