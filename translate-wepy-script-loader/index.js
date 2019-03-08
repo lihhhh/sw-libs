@@ -7,7 +7,7 @@ parse(`
 export default class extends wepy.app {
 	props= {
 		aaa:{
-		  toWay:true
+		  twoWay:true
 		}
 	  }
 }
@@ -103,11 +103,11 @@ function parse(content, map, meta) {
 
 			var props = node.body.find(it => it.key.name == "props");
 
-			//props值为toWay添加watch 实现双向绑定
+			//props值为twoWay添加watch 实现双向绑定
 			if (props) {
 				props.value.properties.map(item => {
 					item.value.properties&&item.value.properties.map(itValue => {
-						if (itValue.key.name === 'toWay' && itValue.value.value) {
+						if (itValue.key.name === 'twoWay' && itValue.value.value) {
 							watch.value.properties.push(getTwoWay(item.key.name))
 						}
 					})
