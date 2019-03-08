@@ -106,7 +106,7 @@ function parse(content, map, meta) {
 			//props值为toWay添加watch 实现双向绑定
 			if (props) {
 				props.value.properties.map(item => {
-					item.value.properties.map(itValue => {
+					item.value.properties&&item.value.properties.map(itValue => {
 						if (itValue.key.name === 'toWay' && itValue.value.value) {
 							watch.value.properties.push(getTwoWay(item.key.name))
 						}
