@@ -5,11 +5,43 @@ let t = require("@babel/types");
 
 parse(`
 export default class extends wepy.app {
-	constructor(){
-
-	}
+	props= {
+		aaa:{
+		  toWay:true
+		}
+	  }
 }
 `);
+
+function getTwoWay(name){
+	var outAst;
+	var twoWayString = `
+		var test = {
+			${name}:function(){
+				this.$emit("update:${name}",this.${name})
+			}
+		}
+	`;
+	
+	var ast = babylon.parse(twoWayString, {
+		sourceType: 'module',
+		plugins: [
+			'classProperties',
+			'asyncGenerators',
+			'objectRestSpread'
+		]
+	})
+
+
+	traverse(ast, {
+		ObjectProperty(path){
+			outAst = path.node;
+		}
+	})
+
+	return outAst;
+}
+
 function parse(content, map, meta) {
 	var ast = babylon.parse(content, {
 		sourceType: 'module',
@@ -39,7 +71,7 @@ function parse(content, map, meta) {
 				"props",
 				"created"
 			];
-			
+
 			var node = path.node;
 
 			// 没有data就添加  data={}
@@ -49,12 +81,9 @@ function parse(content, map, meta) {
 				node.body.push(_data);
 			}
 			var com = node.body.find(it => it.key.name == "components");
-			
+
 			if (com) {
 				var _com = t.objectProperty(t.identifier("_com"), t.objectExpression([]));
-				// com.value.properties.map(it => {
-				// 	_com.value.properties.push(t.objectProperty(t.identifier(it.value.name), it.value));
-				// });
 				_com.value.properties = com.value.properties;
 				_data.value.properties.push(_com);
 			}
@@ -63,6 +92,26 @@ function parse(content, map, meta) {
 			if (!node.body.some(it => it.key.name == "methods")) {
 				let data = t.classProperty(t.identifier("methods"), t.objectExpression([]));
 				node.body.push(data);
+			}
+
+			var watch = node.body.find(it => it.key.name == "watch");
+			// 没有watch就添加  watch={}
+			if (!watch) {
+				watch = t.classProperty(t.identifier("watch"), t.objectExpression([]));
+				node.body.push(watch);
+			}
+
+			var props = node.body.find(it => it.key.name == "props");
+
+			//props值为toWay添加watch 实现双向绑定
+			if (props) {
+				props.value.properties.map(item => {
+					item.value.properties.map(itValue => {
+						if (itValue.key.name === 'toWay' && itValue.value.value) {
+							watch.value.properties.push(getTwoWay(item.key.name))
+						}
+					})
+				})
 			}
 
 			if (node.body.some(it => it.key.name == "onLoad") || node.body.some(it => it.key.name == "onLaunch")) {
@@ -136,7 +185,7 @@ function parse(content, map, meta) {
 		},
 		Identifier(path) {
 			var name = path.node.name;
-			
+
 			switch (path.node.name) {
 				// case 'onLoad':
 				// 	name = 'created';
@@ -165,7 +214,7 @@ function parse(content, map, meta) {
 			path.node.name = name;
 		},
 		ClassMethod(path) {
-			if(path.node.key.name==='constructor'){
+			if (path.node.key.name === 'constructor') {
 				path.remove()
 				return;
 			}
@@ -194,7 +243,7 @@ function parse(content, map, meta) {
 	});
 
 	content = generate(ast, {}, content);
-	
+debugger
 	return content.code;
 };
 module.exports = parse;
