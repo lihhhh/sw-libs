@@ -62,6 +62,19 @@ export default {
                     onUpdateReady:function(cb){},
                     applyUpdate:function(cb){}
                 };
+            },
+            getSystemInfo: function (options) {
+                that.$wx.getSystemInfo({
+                    success: function (res) {
+                        options.success(res)
+                    },
+                    fail: options.fail,
+                    complete: options.complete
+                })
+            },
+            getSystemInfoSync:function(){
+                var res = that.$wx.getSystemInfoSync()
+                return res;
             }
         };
     },

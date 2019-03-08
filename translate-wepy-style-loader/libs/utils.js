@@ -41,8 +41,13 @@ function parsestyle(style) {
 	var ast = postcss.parse(style);
 	ast.walkRules(rule => {
 		var pageClass = getPageSpace(this.resourcePath)
+		
 		if(pageClass){
-			rule.selector = '.'+pageClass+' '+rule.selector;
+			var selectors = rule.selector.split(',')
+			selectors = selectors.map(it=>{
+				return '.'+pageClass+' '+it;
+			})
+			rule.selector = selectors.join(',');
 		}
 		
 		var selectorArr = rule.selector.split(/([,>\+\s]+)/);
