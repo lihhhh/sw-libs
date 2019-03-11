@@ -1,13 +1,13 @@
 
 const template = `
 <template>
-  <div id='web-main'>
+  <div id='web-main' :class="{'web-show-tabbar':config&&config.tabBar&&config.tabBar.list.some(it=>'/'+it.pagePath==$route.path)}">
     <div class='view-box'>
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </div>
-    <div class='tabbar-box' v-if="config.tabBar.list.some(it=>'/'+it.pagePath==$route.path)">
+    <div class='tabbar-box' v-if="config&&config.tabBar&&config.tabBar.list.some(it=>'/'+it.pagePath==$route.path)">
       <tabbar >
         <tabbar-item v-for='(it,index) in config.tabBar.list' :selected="'/'+it.pagePath==$route.path" :key="index" :link="'/'+it.pagePath">
           <img slot="icon" src="'/'+{{it.iconPath}}">
