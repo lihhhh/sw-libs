@@ -9,6 +9,7 @@ import image from './components/image.vue';
 import navigator from './components/navigator.vue';
 import repeat from './components/repeat.vue';
 import input from './components/input.vue';
+import webView from './components/web-view.vue';
 
 const before = 'wepy-';
 
@@ -23,5 +24,7 @@ export default {
         Vue.component(before+'scroll-view',scrollView);
         Vue.component(before+'repeat',repeat);
         Vue.component(before+'input',input);
+        Vue.component(before+'web-view',webView);
+        
     }
 }
