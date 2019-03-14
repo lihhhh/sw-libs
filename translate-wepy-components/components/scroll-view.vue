@@ -59,7 +59,7 @@ let TABLE_EVENT = {
   scroll: null
 };
 export default {
-  name: "scroll-view",
+  name: "wepy-scroll-view",
   props: {
     ...TABLE_OPTIONS
   },

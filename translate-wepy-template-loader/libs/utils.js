@@ -13,13 +13,13 @@ var html5tags = [
 	'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 ];
 
-var tags = ['web-view','view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat','input'];
+var tags = ['web-view', 'view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat', 'input'];
 
 
 function getPageSpace(resourcePath) {
 	var pageClass;
 	if (resourcePath && /[\/\\]src[\/\\]pages[\/\\]/.test(resourcePath)) {
-		resourcePath = resourcePath.replace('.wpy','')
+		resourcePath = resourcePath.replace('.wpy', '')
 		var resourcePathArr = resourcePath.split(/[\/\\]src[\/\\]/);
 		pageClass = resourcePathArr[1].replace(/[\/\\]/, '-') + '-space';
 	}
@@ -51,9 +51,21 @@ function attrPase(attr, el) {
 			attr.name = ':key';
 			break;
 		case 'wx:if':
+			attr.name = 'v-if';
 			if (/\{\{/.test(attr.value)) {
 				attr.value = attr.value.replace(/[\{\}]/g, '')
-				attr.name = 'v-show';
+			}
+			break;
+		case 'wx:elif':
+			attr.name = 'v-else-if';
+			if (/\{\{/.test(attr.value)) {
+				attr.value = attr.value.replace(/[\{\}]/g, '')
+			}
+			break;
+		case 'wx:else':
+			attr.name = 'v-else';
+			if (/\{\{/.test(attr.value)) {
+				attr.value = attr.value.replace(/[\{\}]/g, '')
 			}
 			break;
 		case 'hidden':
@@ -172,7 +184,7 @@ function parse(tree) {
 		if (el.tag == 'img' && Object.keys(el.attrs || {}).some(it => el.name == 'mode')) el.tag = 'image';
 		if (tags.indexOf(el.tag) >= 0) {
 			el.tag = 'wepy-' + el.tag;
-			
+
 			// 添加与标签名同名的class
 			el.attrs = el.attrs || {};
 			el.attrs.class = el.attrs.class || '';

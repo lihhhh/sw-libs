@@ -10,7 +10,7 @@
 import { swiper } from "vue-awesome-swiper";
 
 export default {
-  name: "carrousel",
+  name: "wepy-swiper",
   props: {
     currentItemId: {
       default: ""

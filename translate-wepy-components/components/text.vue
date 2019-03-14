@@ -7,7 +7,7 @@
 selectable	Boolean	false	文本是否可选	1.1.0
 -->
 <template>
-  <span class="wepy_text" :style="style">
+  <span class="wepy-text" :style="style">
     <slot></slot>
   </span>
 </template>
@@ -15,7 +15,7 @@ selectable	Boolean	false	文本是否可选	1.1.0
 <script>
 
 export default {
-
+    name:'wepy-text',
     props: {
         'selectable': {
             type: Boolean,

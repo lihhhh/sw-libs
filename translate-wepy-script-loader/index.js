@@ -43,6 +43,9 @@ function getTwoWay(name){
 }
 
 function parse(content, map, meta) {
+	content = content.replace(/this((\.\$parent)+)/g,function(all,$1){
+		return all.replace(/\.\$parent/g,'.$getParent()')
+	})
 	var ast = babylon.parse(content, {
 		sourceType: 'module',
 		plugins: [

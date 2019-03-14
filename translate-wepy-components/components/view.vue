@@ -19,6 +19,7 @@ hover-stay-time	Number	400	手指松开后点击态保留时间，单位毫秒
 </template>
 <script>
 export default {
+    name:'wepy-view',
     data () {
         return {
             isHover: false

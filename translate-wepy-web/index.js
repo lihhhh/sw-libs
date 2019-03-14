@@ -7,12 +7,20 @@ import _ from 'lodash'
 function deep(key, cb) {
     var _deep = function (_arr) {
         if(!_arr) return;
-        _arr.map(it => {
-            cb(it);
-            if (it[key]) {
-                _deep(it[key])
+        if(Array.isArray(_arr)){
+            _arr.map(it => {
+                cb(it);
+                if (it[key]) {
+                    _deep(it[key])
+                }
+            })
+        }else{
+            var lock = cb(_arr);
+            if(lock) return;
+            if(_arr[key]){
+                _deep(_arr[key])
             }
-        })
+        }
     }
     _deep(this[key]);
 }
@@ -124,10 +132,17 @@ var web = {
             var args = Array.prototype.slice.call(arguments);
             this.$$emit.apply(this,args)
         },
-        getGlobalData:function(){
-            deep(this,'$parent', function (com) {
-                
+        $getParent:function(){
+            var out={};
+            
+            // 这里只是为了获取app里面定义的globalData
+            deep.call(this,'$parent', function (com) {
+                if(com&&com.$vnode&&com.$vnode.tag.indexOf('wepy-')===-1){
+                    out =  com;
+                    return true;
+                }
             })
+            return out;
         }
     },
     addPrototype: function (prototypeObj) {

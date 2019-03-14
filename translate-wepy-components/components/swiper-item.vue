@@ -8,6 +8,7 @@
 import { swiperSlide } from "vue-awesome-swiper";
 
 export default {
+  name:'wepy-swiper-item',
   data() {
     return {
     };

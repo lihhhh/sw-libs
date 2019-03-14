@@ -58,6 +58,7 @@ const LAYOUT_STYLES = {
     }
 };
 export default {
+    name:'wepy-image',
     props: {
         src: {
             type: String,

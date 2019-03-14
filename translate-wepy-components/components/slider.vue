@@ -33,8 +33,7 @@ import { numberValidator, stringToBoolean } from '../helper/util';
 import event from '../event';
 
 export default {
-    name: 'slider',
-
+    name:'wepy-slider',
     props: {
         'min': {
             type: [ Number, String ],

@@ -4,6 +4,7 @@
 </template>
 <script>
 export default {
+    name:'wepy-web-view',
     data () {
         return {
             isHover: false

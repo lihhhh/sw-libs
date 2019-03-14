@@ -4,6 +4,7 @@
 </template>
 <script>
 export default {
+    name:'wepy-input',
     props: ['value'],
     data: function() {
         return {
