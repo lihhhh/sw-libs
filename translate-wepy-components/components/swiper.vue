@@ -1,11 +1,8 @@
 <template>
-  <vue-swiper
-    :options="swiperOption"
-    ref="mySwiper"
-  >
+  <vue-swiper :options="swiperOption" ref="mySwiper">
     <slot></slot>
     <!-- <wepy-swiper-item>111</wepy-swiper-item>
-    <wepy-swiper-item>222</wepy-swiper-item> -->
+    <wepy-swiper-item>222</wepy-swiper-item>-->
   </vue-swiper>
 </template>
  
@@ -14,27 +11,57 @@ import { swiper } from "vue-awesome-swiper";
 
 export default {
   name: "carrousel",
+  props: {
+    currentItemId: {
+      default: ""
+    }
+  },
   data() {
     return {
       swiperOption: {
         // autoplay: true
+        on: {
+          slideChange: (a,b,c)=>{
+            console.log({...this.swiper})
+            var swiperItemList = this.$el.querySelectorAll(".wepy-swiper-item");
+            var activeIndex = this.swiper.activeIndex;
+            var currentItemId = swiperItemList[activeIndex].getAttribute('item-id')
+
+            this.$emit('change',{
+              detail:{
+                currentItemId
+              }
+            })
+          }
+        }
       }
     };
   },
   components: {
-    vueSwiper:swiper,
+    vueSwiper: swiper
   },
   computed: {
     swiper() {
       return this.$refs.mySwiper.swiper;
     }
   },
-  mounted() {
-    // current swiper instance
-    // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-    console.log("this is current swiper instance object", this.swiper);
-    this.swiper.slideTo(3, 1000, false);
-  }
+  watch: {
+    currentItemId: {
+      handler(val) {
+        this.$nextTick(() => {
+          var swiperItemList = this.$el.querySelectorAll(".wepy-swiper-item");
+
+          Array.from(swiperItemList).map((it, idx) => {
+            if (it.getAttribute("item-id") === val) {
+              this.swiper.slideTo(idx, 0, false);
+            }
+          });
+        }, 0);
+      },
+      immediate: true
+    }
+  },
+  mounted() {}
 };
 </script>
 <style>

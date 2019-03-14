@@ -4,25 +4,23 @@ import wepy from 'wepy'
 import q from 'q'
 import _ from 'lodash'
 
-function deep(arr, componentName, cb) {
-    var reg = new RegExp(`${componentName}$`);
+function deep(key, cb) {
     var _deep = function (_arr) {
+        if(!_arr) return;
         _arr.map(it => {
-            if (reg.test(it.$vnode.tag)) {
-                cb(it);
-            }
-            if (it.$children) {
-                _deep(it.$children)
+            cb(it);
+            if (it[key]) {
+                _deep(it[key])
             }
         })
     }
-    _deep(arr);
-
+    _deep(this[key]);
 }
 
-export default {
+var web = {
     $wx: {},
     $Vue: {},
+    $emit:'',
     wxExends: function(){
         var that = this;
         return {
@@ -99,6 +97,7 @@ export default {
         _.assign(wepy, wx)
     },
     install: function (Vue) {
+        Vue.prototype.$$emit = Vue.prototype.$emit;
         this.$Vue = Vue;
         this.init()
         _.assign(Vue.prototype, this.prototype)
@@ -110,8 +109,24 @@ export default {
             })
         }, 300),
         $invoke: function (componentName, methodName, params) {
-            deep(this.$children, componentName, function (com) {
-                com[methodName](params)
+            var reg = new RegExp(`${componentName}$`);
+            deep.call(this,'$children', function (com) {
+                if (reg.test(com.$vnode.tag)) {
+                    com[methodName](params)
+                }
+                
+            })
+        },
+        $emit:function(eventName){
+            if(eventName=='showShadow'){
+                debugger
+            }
+            var args = Array.prototype.slice.call(arguments);
+            this.$$emit.apply(this,args)
+        },
+        getGlobalData:function(){
+            deep(this,'$parent', function (com) {
+                
             })
         }
     },
@@ -120,3 +135,5 @@ export default {
         _.assign(this.$Vue.prototype, this.prototype)
     }
 }
+
+export default web;
