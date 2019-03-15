@@ -10,7 +10,7 @@ bindchange  EventHandle     checked 改变时触发 change 事件，event.detail
 color   Color       switch 的颜色，同 css 的 color
 -->
 <template>
-    <input class="wepy-switch" type="checkbox" :style="{backgroundColor: color}" @click="click($event)" />
+    <input class="wepy_switch" type="checkbox" :style="{backgroundColor: color}" @click="click($event)" />
 </template>
 <script>
 

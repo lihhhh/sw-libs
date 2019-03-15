@@ -17,11 +17,11 @@ show-value  Boolean false   是否显示当前 value
 bindchange  EventHandle     完成一次拖动后触发的事件，event.detail = {value: value}
 -->
 <template>
-    <div class="wepy_slider-box">
+    <div class="wepy_slider-box" :data-value="comValue" :data-name="name">
         <div class="wepy_slider">
             <div class="wepy_slider-inner" @click="click" :style="{backgroundColor: backgroundColor || color}">
                 <div class="wepy_slider-track" :style="{width: percent + '%', backgroundColor: activeColor || selectedColor}"></div>
-                <div class="wepy_slider-handler" :style="{left: percent + '%'}" @touchstart="touchstart" @touchmove="touchmove"></div>
+                <div class="wepy_slider-handler" :style="{left: percent + '%'}" @touchstart="touchStart" @touchmove="touchMove"></div>
             </div>
         </div>
         <div class="wepy_slider-value" v-show="showValue">{{percent}}</div>
@@ -35,6 +35,10 @@ import event from '../event';
 export default {
     name:'wepy-slider',
     props: {
+        'name': {
+            type: String,
+            default: ''
+        },
         'min': {
             type: [ Number, String ],
             default: 0,
@@ -87,33 +91,40 @@ export default {
         return {
             startLeft: 0,
             startX: 0,
-            totalLen: 0
+            totalLen: 0,
+            comValue:this.value
         }
     },
 
     computed: {
         percent () {
-            if (this.value < this.min)
+            if (this.comValue < this.min)
                 return this.min;
-            if (this.value > this.max)
+            if (this.comValue > this.max)
                 return this.max;
-            return (this.value / this.step >> 0) * this.step;
+            return (this.comValue / this.step >> 0) * this.step;
+        }
+    },
+
+    watch:{
+        comValue(val){
+            this.$emit('update:value',val);
         }
     },
 
     methods: {
-        touchstart (e) {
+        touchStart (e) {
             if (this.disabled)
                 return;
-            this.startLeft = this.value * this.totalLen / 100;
+            this.startLeft = this.comValue * this.totalLen / 100;
             this.startX = e.changedTouches[0].clientX;
         },
-        touchmove (e) {
+        touchMove (e) {
             if (this.disabled)
                 return;
             let dist = this.startLeft + e.changedTouches[0].clientX - this.startX;
             dist = dist < 0 ? 0 : dist > this.totalLen ? this.totalLen : dist;
-            this.value =  parseInt(dist / this.totalLen * 100);
+            this.comValue =  parseInt(dist / this.totalLen * 100);
             
             this.$emit('change', {
                 type: 'change',
@@ -129,7 +140,7 @@ export default {
                 return;
             let dist = e.clientX - e.currentTarget.offsetLeft;
             dist = dist < 0 ? 0 : dist > this.totalLen ? this.totalLen : dist;
-            this.value =  parseInt(dist / this.totalLen * 100);
+            this.comValue =  parseInt(dist / this.totalLen * 100);
             this.$emit('change', {
                 type: 'change',
                 detail: {
@@ -141,7 +152,7 @@ export default {
         }
     },
 
-    ready () {
+    onShow () {
         this.totalLen = this.$el.firstElementChild.firstElementChild.clientWidth;
     }
 }

@@ -6,18 +6,18 @@ import _ from 'lodash'
 
 function deep(key, cb) {
     var _deep = function (_arr) {
-        if(!_arr) return;
-        if(Array.isArray(_arr)){
+        if (!_arr) return;
+        if (Array.isArray(_arr)) {
             _arr.map(it => {
                 cb(it);
                 if (it[key]) {
                     _deep(it[key])
                 }
             })
-        }else{
+        } else {
             var lock = cb(_arr);
-            if(lock) return;
-            if(_arr[key]){
+            if (lock) return;
+            if (_arr[key]) {
                 _deep(_arr[key])
             }
         }
@@ -28,8 +28,8 @@ function deep(key, cb) {
 var web = {
     $wx: {},
     $Vue: {},
-    $emit:'',
-    wxExends: function(){
+    $emit: '',
+    wxExends: function () {
         var that = this;
         return {
             navigateTo: function (params) {
@@ -39,7 +39,7 @@ var web = {
                     params.url = params.url.replace(/^[^a-z]*/, '');
                     params.url = '/' + params.url;
                 }
-    
+
                 window.$router.push({
                     path: params.url
                 })
@@ -50,23 +50,43 @@ var web = {
                 }
                 return that.$wx.request(params)
             },
-            showLoading: function () {
+            showLoading: function (options = {}) {
+                // 显示
+                that.$Vue.$vux.loading.show({
+                    text: options.title || 'Loading'
+                })
             },
             hideLoading: function () {
+                that.$Vue.$vux.loading.hide()
             },
             showShareMenu: function () { },
-            showModal: function (options) {
-                options.success({
-                    confirm: true
-                });
+            showModal: function (options={}) {
+                var {title,content,success,complete} = options;
+                that.$Vue.$vux.confirm.show({
+                    title,
+                    content,
+                    onCancel() {
+                        success({
+                            cancel: true
+                        });
+                        typeof complete === 'function' && complete();
+                    },
+                    onConfirm() {
+                        success({
+                            confirm: true
+                        });
+                        typeof complete === 'function' && complete();
+                    }
+                })
+
             },
             hideShareMenu: function (options) {
             },
-            getUpdateManager:function(){
+            getUpdateManager: function () {
                 return {
-                    onCheckForUpdate:function(cb){},
-                    onUpdateReady:function(cb){},
-                    applyUpdate:function(cb){}
+                    onCheckForUpdate: function (cb) { },
+                    onUpdateReady: function (cb) { },
+                    applyUpdate: function (cb) { }
                 };
             },
             getSystemInfo: function (options) {
@@ -78,7 +98,7 @@ var web = {
                     complete: options.complete
                 })
             },
-            getSystemInfoSync:function(){
+            getSystemInfoSync: function () {
                 var res = that.$wx.getSystemInfoSync()
                 return res;
             }
@@ -118,27 +138,27 @@ var web = {
         }, 300),
         $invoke: function (componentName, methodName, params) {
             var reg = new RegExp(`${componentName}$`);
-            deep.call(this,'$children', function (com) {
+            deep.call(this, '$children', function (com) {
                 if (reg.test(com.$vnode.tag)) {
                     com[methodName](params)
                 }
-                
+
             })
         },
-        $emit:function(eventName){
-            if(eventName=='showShadow'){
+        $emit: function (eventName) {
+            if (eventName == 'showShadow') {
                 debugger
             }
             var args = Array.prototype.slice.call(arguments);
-            this.$$emit.apply(this,args)
+            this.$$emit.apply(this, args)
         },
-        $getParent:function(){
-            var out={};
-            
+        $getParent: function () {
+            var out = {};
+
             // 这里只是为了获取app里面定义的globalData
-            deep.call(this,'$parent', function (com) {
-                if(com&&com.$vnode&&com.$vnode.tag.indexOf('wepy-')===-1){
-                    out =  com;
+            deep.call(this, '$parent', function (com) {
+                if (com && com.$vnode && com.$vnode.tag.indexOf('wepy-') === -1) {
+                    out = com;
                     return true;
                 }
             })

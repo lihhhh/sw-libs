@@ -58,7 +58,7 @@ export default {
         change (e) {
             e.stopPropagation();
 
-            this.$dispatch('change', {
+            this.$emit('change', {
                 type: 'change',
                 detail: {
                     value: this.getCheckboxValue()
@@ -68,7 +68,7 @@ export default {
         }
     },
 
-    ready () {
+    mounted () {
         if (this.$parent.$el.classList.contains('wepy_checkbox-group')) {
             this.checkboxName = this.$parent.$el.id;
         }
@@ -84,7 +84,8 @@ export default {
 }
 .wepy_checkbox input{
     position: absolute;
-    left: -9999em;
+    // left: -9999em;
+    opacity: 0;
 }
 .wepy_checkbox .wepy_icon:before {
     color: #C9C9C9;

@@ -1,41 +1,52 @@
 <template>
     <!-- <x-input title="title" v-model="inputVal"></x-input> -->
-    <input :value="inputVal" @input="change"/>
+    <input :value="inputVal" autocomplete="off" @input="change">
 </template>
 <script>
 export default {
-    name:'wepy-input',
-    props: ['value'],
-    data: function() {
-        return {
-            inputVal: this.value
-        };
-    },
-    methods:{
-        change(event){
-            // this.inputVal = event.target.value;
-            this.$emit('input',{
-                detail:{
-                    value:event.target.value
-                }
-            });
+  name: "wepy-input",
+  props: ["value"],
+  data: function() {
+    return {
+      inputVal: this.value
+    };
+  },
+  methods: {
+    change(event) {
+      // this.inputVal = event.target.value;
+      this.$emit("input", {
+        detail: {
+          value: event.target.value
         }
-    },
-    watch:{
-        value(val){
-            if(val!==this.inputVal){
-                this.inputVal = val;
-            }
-        },
-        inputVal(val){
-            this.$emit("update:value",val);
-        }
+      });
     }
+  },
+  watch: {
+    value(val) {
+      if (val !== this.inputVal) {
+        this.inputVal = val;
+      }
+    },
+    inputVal(val) {
+      this.$emit("update:value", val);
+    }
+  }
 };
 </script>
 <style lang="less">
-.red {
-    color: red;
+.wepy-input {
+  display: block;
+  width: 100%;
+  height: 22px;
+  text-overflow: clip;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: UICTFontTextStyleBody;
+  min-height: 22px;
+  font-size: 14px;
+}
+.wepy-input:focus {
+  outline: none;
 }
 </style>
 

@@ -110,6 +110,7 @@ export default {
       mouseWheel: true,
       pullUpLoad: true
     };
+
     if (this.scX) {
       options.scrollX = true;
     }

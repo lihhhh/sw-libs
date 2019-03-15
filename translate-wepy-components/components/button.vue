@@ -37,7 +37,7 @@ open-type 有效值：
 contact 打开客服会话  1.1.0
 -->
 <template>
-    <button class="wepy_button" :size="size" type="{{type}}" :disabled="disabled" :plain="plain" :class="isHover ? hoverClass : ''" @touchstart="touchstart" @touchend="touchend"><slot></slot></button>
+    <button class="wepy_button" :size="size" :type="type" :disabled="disabled" :plain="plain" :class="isHover ? hoverClass : ''" @touchstart="touchStart" @touchend="touchEnd"><slot></slot></button>
 </template>
 <script>
 
@@ -103,7 +103,7 @@ export default {
     },
 
     methods: {
-        touchstart () {
+        touchStart () {
             clearInterval(this.stayInterval);
             if (!this.startInterval && this.hoverClass !== 'none' && this.hoverClass !== '') { // 实测'none'和''都不会触发hover
                 this.startInterval = setInterval(() => {
@@ -111,7 +111,7 @@ export default {
                 }, this.hoverStartTime);
             }
         },
-        touchend () {
+        touchEnd () {
             clearInterval(this.startInterval);
             if (!this.stayInterval && this.hoverClass !== 'none' && this.hoverClass !== '') {
                 this.stayInterval = setInterval(() => {

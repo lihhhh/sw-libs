@@ -9,7 +9,7 @@ function getPageSpace(resourcePath) {
 	if (resourcePath && /[\/\\]src[\/\\]pages[\/\\]/.test(resourcePath)) {
 		resourcePath = resourcePath.replace('.wpy','')
 		var resourcePathArr = resourcePath.split(/[\/\\]src[\/\\]/);
-		pageClass = resourcePathArr[1].replace(/[\/\\]/, '-') + '-space';
+		pageClass = resourcePathArr[1].replace(/[\/\\]/g, '-') + '-space';
 	}
 	return pageClass;
 }

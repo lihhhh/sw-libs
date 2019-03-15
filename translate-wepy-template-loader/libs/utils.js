@@ -13,7 +13,7 @@ var html5tags = [
 	'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 ];
 
-var tags = ['web-view', 'view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat', 'input'];
+var tags = ['form','button','checkbox-group','checkbox','radio-group','radio','switch','slider','web-view', 'view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat', 'input'];
 
 
 function getPageSpace(resourcePath) {
@@ -21,7 +21,7 @@ function getPageSpace(resourcePath) {
 	if (resourcePath && /[\/\\]src[\/\\]pages[\/\\]/.test(resourcePath)) {
 		resourcePath = resourcePath.replace('.wpy', '')
 		var resourcePathArr = resourcePath.split(/[\/\\]src[\/\\]/);
-		pageClass = resourcePathArr[1].replace(/[\/\\]/, '-') + '-space';
+		pageClass = resourcePathArr[1].replace(/[\/\\]/g, '-') + '-space';
 	}
 	return pageClass;
 }
