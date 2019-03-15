@@ -12,15 +12,28 @@ bindchange	EventHandle		<radio-group/> 中的选中项发生变化时触发 chan
     </div>
 </template>
 <script>
-import { uuid } from '../helper/util';
+import { uuid } from "../helper/util";
 
 export default {
-    name: 'radio-group',
+  name: "radio-group",
 
-    data () {
-        return {
-            id: `radio-${uuid()}`
-        };
+  props: {
+    name: {
+      type: String,
+      default: ""
     }
-}
+  },
+
+  data() {
+    return {
+      id: `radio-${uuid()}`
+    };
+  },
+
+  computed: {
+    outputValue() {
+      return this.$getChildrenOutputValues();
+    }
+  }
+};
 </script>

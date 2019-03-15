@@ -11,7 +11,7 @@ color	Color		checkbox的颜色，同css的color
 -->
 <template>
     <div class="wepy_checkbox">
-        <input type="checkbox" :name="checkboxName" :checked="checked" :disabled="disabled" :value="value" @change="change" />
+        <input ref='ipt' type="checkbox" :name="checkboxName" :checked="checked" :disabled="disabled" :value="value" @change="change" />
         <i class="wepy_icon" :style="{color: color}"></i>
     </div>
 </template>
@@ -22,11 +22,16 @@ export default {
 
     data () {
         return {
-            checkboxName: 'checkbox'
+            checkboxName: 'checkbox',
+            outputValue:''
         };
     },
 
     props: {
+        name: {
+            type: String,
+            default: ''
+        },
         value: {
             type: String,
             default: ''
@@ -45,6 +50,9 @@ export default {
         }
     },
 
+    computed:{
+    },
+
     methods: {
         getCheckboxValue () {
             const $checkboxLists = document.getElementsByName(this.checkboxName);
@@ -55,9 +63,16 @@ export default {
             });
             return checkboxValue;
         },
+        getOutputValue(){
+            var ipt = this.$refs['ipt'];
+            if(ipt.checked){
+                return ipt.value;
+            }
+            return '';
+        },
         change (e) {
             e.stopPropagation();
-
+            this.outputValue = this.getOutputValue();
             this.$emit('change', {
                 type: 'change',
                 detail: {
@@ -72,6 +87,7 @@ export default {
         if (this.$parent.$el.classList.contains('wepy_checkbox-group')) {
             this.checkboxName = this.$parent.$el.id;
         }
+        this.outputValue = this.getOutputValue();
     }
 }
 </script>

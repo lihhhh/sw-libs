@@ -17,7 +17,7 @@ show-value  Boolean false   是否显示当前 value
 bindchange  EventHandle     完成一次拖动后触发的事件，event.detail = {value: value}
 -->
 <template>
-    <div class="wepy_slider-box" :data-value="comValue" :data-name="name">
+    <div class="wepy_slider-box">
         <div class="wepy_slider">
             <div class="wepy_slider-inner" @click="click" :style="{backgroundColor: backgroundColor || color}">
                 <div class="wepy_slider-track" :style="{width: percent + '%', backgroundColor: activeColor || selectedColor}"></div>
@@ -97,6 +97,9 @@ export default {
     },
 
     computed: {
+        outputValue(){
+            return this.comValue;
+        },
         percent () {
             if (this.comValue < this.min)
                 return this.min;

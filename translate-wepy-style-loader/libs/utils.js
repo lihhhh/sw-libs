@@ -65,7 +65,8 @@ function parsestyle(style) {
 				value = value.map(it => {
 					if (it.indexOf('rpx') > -1) {
 						var num = it.replace('rpx', '');
-						it = num / 2 + 'px';
+						
+						it = num/7.5 + 'vw';
 					}
 					return it;
 				})

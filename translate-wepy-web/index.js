@@ -50,6 +50,12 @@ var web = {
                 }
                 return that.$wx.request(params)
             },
+            // 震动
+            vibrateLong: function (options = {}) {
+                var { success, complete } = options;
+                typeof success === 'function' && success();
+                typeof complete === 'function' && complete();
+            },
             showLoading: function (options = {}) {
                 // 显示
                 that.$Vue.$vux.loading.show({
@@ -60,8 +66,8 @@ var web = {
                 that.$Vue.$vux.loading.hide()
             },
             showShareMenu: function () { },
-            showModal: function (options={}) {
-                var {title,content,success,complete} = options;
+            showModal: function (options = {}) {
+                var { title, content, success, complete } = options;
                 that.$Vue.$vux.confirm.show({
                     title,
                     content,
@@ -79,6 +85,30 @@ var web = {
                     }
                 })
 
+            },
+            showToast: function (options = {}) {
+                var {
+                    title = '提示',
+                    icon = 'success',
+                    duration = 1500,
+                    mask = false,
+                    complete,
+                    success
+                } = options;
+
+                // 显示
+                that.$Vue.$vux.toast.show({
+                    text: title,
+                    time: duration,
+                    type: icon,
+                    "isShowMask": mask
+                })
+                typeof success === 'function' && success();
+                typeof complete === 'function' && complete();
+            },
+            hideToast: function () {
+                // 隐藏
+                that.$Vue.$vux.toast.hide()
             },
             hideShareMenu: function (options) {
             },
@@ -162,6 +192,26 @@ var web = {
                     return true;
                 }
             })
+            return out;
+        },
+        $deep: deep,
+        $getFormFields: function () {
+            var fields = {};
+            this.$deep('$children', (com) => {
+                if (com.name) {
+                    fields[com.name] = com.outputValue;
+                }
+            })
+            return fields;
+        },
+        $getChildrenOutputValues: function () {
+            var out = [];
+            this.$deep('$children', (com) => {
+                if (com.outputValue) {
+                    out.push(com.outputValue)
+                }
+            })
+
             return out;
         }
     },

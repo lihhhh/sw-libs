@@ -121,9 +121,9 @@ function attrPase(attr, el) {
 			value = value.map(it => {
 				if (/^\d+rpx$/.test(it)) {
 					var num = it.replace('rpx', '');
-					it = num / 2 + 'px';
+					it = num/7.5 + 'vw';
 				} else if (/^\{.*?\}rpx$/.test(it)) {
-					it = it.replace("{", "{(").replace("}", ")/2}").replace('rpx', 'px')
+					it = it.replace("{", "{(").replace("}", ")/7.5}").replace('rpx', 'vw')
 				}
 				return it;
 			})

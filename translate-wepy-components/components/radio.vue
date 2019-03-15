@@ -10,17 +10,18 @@ disabled	Boolean	false	是否禁用
 color	Color		radio的颜色，同css的color
 -->
 <template>
-    <div class="wepy_radio">
-        <input
-            type="radio"
-            :name="radioName"
-            :checked="checked"
-            :disabled="disabled"
-            :value="value"
-            @change="change"
-        >
-        <i class="wepy_icon" :style="{color: color}"></i>
-    </div>
+  <div class="wepy_radio">
+    <input
+      type="radio"
+      ref="ipt"
+      :name="radioName"
+      :checked="checked"
+      :disabled="disabled"
+      :value="value"
+      @change="change"
+    >
+    <i class="wepy_icon" :style="{color: color}"></i>
+  </div>
 </template>
 <script>
 export default {
@@ -28,11 +29,16 @@ export default {
 
   data() {
     return {
+      outputValue:'',
       radioName: "radio"
     };
   },
 
   props: {
+    name: {
+      type: String,
+      default: ""
+    },
     value: {
       type: String,
       default: ""
@@ -52,8 +58,17 @@ export default {
   },
 
   methods: {
+    getOutputValue() {
+      var ipt = this.$refs["ipt"];
+      if (ipt.checked) {
+        return ipt.value;
+      }
+      return "";
+    },
     change(e) {
       e.stopPropagation();
+      
+      this.outputValue = this.getOutputValue();
 
       this.$emit("change", {
         type: "change",
@@ -69,6 +84,7 @@ export default {
     if (this.$parent.$el.classList.contains("wepy_radio-group")) {
       this.radioName = this.$parent.$el.id;
     }
+    this.outputValue = this.getOutputValue();
   }
 };
 </script>

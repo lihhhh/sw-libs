@@ -17,10 +17,23 @@ import { uuid } from '../helper/util';
 export default {
     name: 'checkbox-group',
 
+    props :{
+        name: {
+            type: String,
+            default: ''
+        }
+    },
+
     data () {
         return {
             id: `checkbox-${uuid()}`
         };
+    },
+
+    computed:{
+        outputValue(){
+            return this.$getChildrenOutputValues();
+        }
     }
 }
 </script>

@@ -46,7 +46,7 @@ import { stringToBoolean }from '../helper/util';
 const BUTTON_TYPES = ['default', 'primary', 'warn'];
 
 export default {
-    name: 'button',
+    name: 'wepy-button',
 
     props: {
         'size': {

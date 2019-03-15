@@ -1,11 +1,24 @@
 <template>
-    <!-- <x-input title="title" v-model="inputVal"></x-input> -->
-    <input :value="inputVal" autocomplete="off" @input="change">
+  <!-- <x-input title="title" v-model="inputVal"></x-input> -->
+  <input v-model="inputVal" autocomplete="off" @input="change">
 </template>
 <script>
 export default {
   name: "wepy-input",
-  props: ["value"],
+  props: {
+    name: {
+      type: String,
+      default: ""
+    },
+    value: {
+      default: ""
+    }
+  },
+  computed:{
+    outputValue(){
+      return this.inputVal;
+    }
+  },
   data: function() {
     return {
       inputVal: this.value
