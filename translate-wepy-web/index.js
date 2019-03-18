@@ -154,9 +154,16 @@ var web = {
         _.assign(wx, wepyWeb)
         _.assign(wepy, wx)
     },
+    setGlobal:function(){
+        window.getCurrentPages = ()=>{
+            var historyPages = this.$Vue.app.store.state.historyPages;//
+            return historyPages;
+        }
+    },
     install: function (Vue) {
         Vue.prototype.$$emit = Vue.prototype.$emit;
         this.$Vue = Vue;
+        this.setGlobal()
         this.init()
         _.assign(Vue.prototype, this.prototype)
     },
