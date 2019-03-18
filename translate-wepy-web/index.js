@@ -168,11 +168,11 @@ var web = {
         }, 300),
         $invoke: function (componentName, methodName, params) {
             var reg = new RegExp(`${componentName}$`);
+            
             deep.call(this, '$children', function (com) {
                 if (reg.test(com.$vnode.tag)) {
                     com[methodName](params)
                 }
-
             })
         },
         $emit: function (eventName) {
