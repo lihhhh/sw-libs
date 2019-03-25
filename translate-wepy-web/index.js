@@ -32,6 +32,22 @@ var web = {
     wxExends: function () {
         var that = this;
         return {
+            mixin:class {
+                constructor(){
+                    
+                }
+                parseWeb(){
+                    var methods = {};
+                    Object.getOwnPropertyNames(this.__proto__).map(it=>{
+                        if(it==="constructor") return;
+                        methods[it] = this.__proto__[it];
+                    })
+                    
+                    return {
+                        methods
+                    };
+                }
+            },
             navigateTo: function (params) {
                 // 前面没斜杠加斜杠
                 if (/^[^\/]/.test(params.url)) {
@@ -183,16 +199,21 @@ var web = {
             })
         },
         $emit: function (eventName) {
-            if (eventName == 'showShadow') {
-                debugger
-            }
+            deep.call(this, '$parent', function (com) {
+                if (com && com.$vnode && com.$vnode.tag.indexOf('wepy-') === -1) {
+                    if(com.customEvents&&com.customEvents[eventName]){
+                        com.customEvents[eventName].apply(com,args)
+                    }
+                }
+            })
+            
             var args = Array.prototype.slice.call(arguments);
             this.$$emit.apply(this, args)
         },
         $getParent: function () {
             var out = {};
 
-            // 这里只是为了获取app里面定义的globalData
+            // 
             deep.call(this, '$parent', function (com) {
                 if (com && com.$vnode && com.$vnode.tag.indexOf('wepy-') === -1) {
                     out = com;

@@ -13,7 +13,7 @@ export default class extends wepy.app {
 }
 `);
 
-function getTwoWay(name){
+function getTwoWay(name) {
 	var outAst;
 	var twoWayString = `
 		var test = {
@@ -22,7 +22,7 @@ function getTwoWay(name){
 			}
 		}
 	`;
-	
+
 	var ast = babylon.parse(twoWayString, {
 		sourceType: 'module',
 		plugins: [
@@ -34,7 +34,7 @@ function getTwoWay(name){
 
 
 	traverse(ast, {
-		ObjectProperty(path){
+		ObjectProperty(path) {
 			outAst = path.node;
 		}
 	})
@@ -42,9 +42,10 @@ function getTwoWay(name){
 	return outAst;
 }
 
+
 function parse(content, map, meta) {
-	content = content.replace(/((\.\$parent)+)/g,function(all,$1){
-		return all.replace(/\.\$parent/g,'.$getParent()')
+	content = content.replace(/((\.\$parent)+)/g, function (all, $1) {
+		return all.replace(/\.\$parent/g, '.$getParent()')
 	})
 	var ast = babylon.parse(content, {
 		sourceType: 'module',
@@ -62,6 +63,7 @@ function parse(content, map, meta) {
 				"data",
 				// "onLoad",
 				//   "onLaunch",
+				"mixins",
 				"constructor",
 				"onShow",
 				"onHide",
@@ -70,7 +72,7 @@ function parse(content, map, meta) {
 				"components",
 				"watch",
 				"computed",
-				"events",
+				// "events",
 				"props",
 				"created"
 			];
@@ -91,6 +93,12 @@ function parse(content, map, meta) {
 				_data.value.properties.push(_com);
 			}
 
+			var events = node.body.find(it => it.key.name == "events");
+
+			if (events) {
+				events.key.name = 'customEvents';
+			}
+
 			// 没有methods就添加  methods={}
 			if (!node.body.some(it => it.key.name == "methods")) {
 				let data = t.classProperty(t.identifier("methods"), t.objectExpression([]));
@@ -109,7 +117,7 @@ function parse(content, map, meta) {
 			//props值为twoWay添加watch 实现双向绑定
 			if (props) {
 				props.value.properties.map(item => {
-					item.value.properties&&item.value.properties.map(itValue => {
+					item.value.properties && item.value.properties.map(itValue => {
 						if (itValue.key.name === 'twoWay' && itValue.value.value) {
 							watch.value.properties.push(getTwoWay(item.key.name))
 						}
@@ -177,9 +185,9 @@ function parse(content, map, meta) {
 		StringLiteral(path) {
 			var value = path.node.name;
 			switch (path.node.value) {
-				case "wepy":
-					value = "wepy-web";
-					break;
+				// case "wepy":
+				// 	value = "wepy-web";
+				// 	break;
 				default:
 					value = path.node.value;
 					break;
@@ -231,6 +239,17 @@ function parse(content, map, meta) {
 		ClassProperty(path) {
 			// 转换data
 			var node = path.node;
+			// 转化mixins
+			if (path.get("key").isIdentifier({ name: "mixins" })) {
+				path.traverse({
+					Identifier(_path) {
+						if (_path.listKey == "elements") {
+							_path.replaceWithSourceString(`new ${_path.node.name}().parseWeb()`);
+						}
+					}
+				});
+			}
+
 			if (path.get("key").isIdentifier({ name: "data" }) && node.value.type == "ObjectExpression") {
 				var body = t.blockStatement([t.returnStatement(node.value)]);
 				var value = t.FunctionExpression(null, [], body);
@@ -246,7 +265,7 @@ function parse(content, map, meta) {
 	});
 
 	content = generate(ast, {}, content);
-	
+
 	return content.code;
 };
 module.exports = parse;

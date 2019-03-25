@@ -125,9 +125,7 @@ export default {
         detail: {
           scrollTop: Math.abs(parseFloat(e.y))
         },
-        currentTarget: {
-          dataset: util.setDataset(this.$refs["element"])
-        }
+        currentTarget: e.currentTarget
       };
       this.$emit("scroll", evt);
     });
