@@ -60,6 +60,10 @@ const LAYOUT_STYLES = {
 export default {
     name:'wepy-image',
     props: {
+        defaultStyle:{
+            // type:'Object',
+            default: () => {}
+        },
         src: {
             type: String,
             default: () => ''
@@ -82,13 +86,20 @@ export default {
     },
     computed: {
         getImageStyle () {
-            return Object.assign(
+            var defaultStyle = this.defaultStyle||{};
+            console.log('defaultStyle',this.defaultStyle)
+            console.log('src',this.src)
+            var style = Object.assign(
                 {
                     backgroundImage: `url(${this.src})`
                 },
+                defaultStyle,
+                
                 (this.mode === 'widthFix' && this.containerHeight) ? { height: this.containerHeight } : {},
                 LAYOUT_STYLES[this.mode]
-            );
+            )
+            
+            return style;
         }
     },
     methods: {

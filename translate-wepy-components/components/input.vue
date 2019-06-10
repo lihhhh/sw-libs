@@ -57,6 +57,7 @@ export default {
   font-family: UICTFontTextStyleBody;
   min-height: 22px;
   font-size: 14px;
+  border: none;
 }
 .wepy-input:focus {
   outline: none;
