@@ -49,6 +49,11 @@ var web = {
                 }
             },
             navigateTo: function (params) {
+                // ./相对路径开头的  需要根据当前页面做处理
+                if(/^\.\//.test(params.url)){
+                    var currentPath = $router.history.current.path.replace(/(.*\/).*/,'$1');
+                    params.url=params.url.replace('./',currentPath)
+                }
                 // 前面没斜杠加斜杠
                 if (/^[^\/]/.test(params.url)) {
                     // 去除开头非字母的
@@ -57,8 +62,19 @@ var web = {
                 }
 
                 window.$router.push({
-                    path: params.url
+                    path: params.url,
+                    query:{
+                        routerType:'navigateTo' //有此类型 会缓存上一页面
+                    }
                 })
+            },
+            navigateBack: function (options){
+                var { success, complete,delta } = options;
+                
+                window.$router.go(delta)
+                
+                typeof success === 'function' && success();
+                typeof complete === 'function' && complete();
             },
             request: function (params) {
                 if (params.header) {

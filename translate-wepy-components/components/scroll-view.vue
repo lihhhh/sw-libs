@@ -32,11 +32,11 @@ let TABLE_OPTIONS = {
     default: 50
   },
   "scroll-top": {
-    type: Number,
+    type: [Number,String],
     default: 0
   },
   "scroll-left": {
-    type: Number,
+    type: [Number,String],
     default: 0
   },
   "scroll-into-view": {
@@ -91,6 +91,36 @@ export default {
     }
   },
   watch: {
+    scrollLeft(value,oldValue){
+      var vl = value.replace(/[^\d]/g,'')
+      var oldVl = oldValue.replace(/[^\d]/g,'')
+
+      if(/\dpx/.test(value)){
+      }else{
+        vl = vl/2;
+      }
+
+      vl =  vl - oldVl*1;
+
+      console.log('横行滚动',vl)
+      this.BScroll.scrollBy(-vl,0,300);
+
+    },
+    scrollTop(value,oldValue){
+      var vl = value.replace(/[^\d]/g,'')
+      var oldVl = oldValue.replace(/[^\d]/g,'')
+
+      if(/\dpx/.test(value)){
+      }else{
+        vl = vl/2;
+      }
+
+      vl =  vl - oldVl*1;
+
+      console.log('横行滚动',vl)
+      this.BScroll.scrollBy(0,-vl,300);
+
+    },
     scrollIntoView(value) {
       this.BScroll.refresh()
       if (this.scY) {
