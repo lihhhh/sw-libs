@@ -87,6 +87,9 @@ export default {
   },
   methods: {
     touchStart(){
+      console.log('刷新scroll')
+      // 此方法不调用 不会触发第二次上拉加载事件
+      this.BScroll.finishPullUp()
       this.BScroll.refresh()
     }
   },
@@ -161,6 +164,7 @@ export default {
     });
 
     this.BScroll.on("pullingUp", e => {
+      console.log('事件触发---------> 滚动触底')
       var evt = {};
       this.$emit("scrolltolower", evt);
     });
