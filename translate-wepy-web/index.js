@@ -64,14 +64,14 @@ var web = {
                 window.$router.push({
                     path: params.url,
                     query:{
-                        routerType:'navigateTo' //有此类型 会缓存上一页面
+                        // routerType:'navigateTo' //有此类型 会缓存上一页面
                     }
                 })
             },
             navigateBack: function (options){
                 var { success, complete,delta } = options;
                 
-                window.$router.go(delta)
+                window.$router.go(-delta)
                 
                 typeof success === 'function' && success();
                 typeof complete === 'function' && complete();
@@ -133,6 +133,7 @@ var web = {
                     text: title,
                     time: duration,
                     type: icon,
+                    width: '34%',
                     "isShowMask": mask
                 })
                 typeof success === 'function' && success();
@@ -187,9 +188,33 @@ var web = {
         _.assign(wepy, wx)
     },
     setGlobal:function(){
+        var Ws = WebSocket;
+        
         window.getCurrentPages = ()=>{
             var historyPages = this.$Vue.app.store.state.historyPages;//
+            historyPages.map(it=>{
+                it.__route__ = it.route.replace(/^\//,'');
+            })
             return historyPages;
+        }
+
+        window.WebSocket = function(url){
+            let ws = new Ws(url)
+            var {send} = ws;
+            ws.send = function(options){
+                var data ,success;
+                if(typeof options === 'string'){
+                    data = options
+                }else {
+                    data = options.data;
+                    success = options.success;
+                }
+
+                // send  依赖 ws实例
+                send.call(ws,data)
+                typeof success === 'function' && success();
+            }
+            return ws;
         }
     },
     install: function (Vue) {

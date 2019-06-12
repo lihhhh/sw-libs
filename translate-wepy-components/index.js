@@ -18,6 +18,8 @@ import radioGroup from './components/radio-group.vue';
 import checkbox from './components/checkbox.vue';
 import checkboxGroup from './components/checkbox-group.vue';
 import form from './components/form.vue';
+import picker from './components/picker.vue';
+import textarea from './components/textarea.vue';
 
 const before = 'wepy-';
 
@@ -41,5 +43,7 @@ export default {
         Vue.component(before+'checkbox',checkbox);
         Vue.component(before+'checkbox-group',checkboxGroup);
         Vue.component(before+'form',form);
+        Vue.component(before+'picker',picker);
+        Vue.component(before+'textarea',textarea);
     }
 }

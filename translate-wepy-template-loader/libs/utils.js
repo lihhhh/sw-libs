@@ -15,7 +15,27 @@ var html5tags = [
 	'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 ];
 
-var tags = ['form', 'button', 'checkbox-group', 'checkbox', 'radio-group', 'radio', 'switch', 'slider', 'web-view', 'view', 'text', 'navigator', 'scroll-view', 'swiper', 'swiper-item', 'image', 'repeat', 'input'];
+var tags = ['form',
+	'button',
+	'checkbox-group',
+	'checkbox',
+	'radio-group',
+	'radio',
+	'switch',
+	'slider',
+	'web-view',
+	'view',
+	'text',
+	'navigator',
+	'scroll-view',
+	'swiper',
+	'swiper-item',
+	'image',
+	'repeat',
+	'input',
+	'picker',
+	'textarea'
+];
 
 
 function getPageSpace(resourcePath) {
@@ -224,7 +244,7 @@ function autoCloseTag(html) {
 		flags[len] = all;
 		return '[$' + len + ']';
 	})
-	
+
 	html = html.replace(/<([a-zA-Z\-_]+)[^<>]*\/>/g, function (all, tagName) {
 		if (html5tags.indexOf(tagName) == -1) {
 			var out = `${all.replace('/>', '>')}</${tagName}>`;
@@ -232,7 +252,7 @@ function autoCloseTag(html) {
 		}
 		return all;
 	})
-	
+
 	html = html.replace(/\[\$(\d+)\]/g, function (all, $1) {
 		return flags[$1];
 	})
@@ -253,7 +273,7 @@ function parsehtml(html) {
 		.process(html, {
 			sync: true
 		}).html
-		
+
 	return result;
 }
 
