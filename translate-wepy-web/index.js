@@ -245,12 +245,20 @@ var web = {
             })
         },
         $emit: function (eventName) {
+            var that = this;
             var args = Array.prototype.slice.call(arguments);
 
             deep.call(this, '$parent', function (com) {
                 if (com && com.$vnode && com.$vnode.tag.indexOf('wepy-') === -1) {
                     if(com.customEvents&&com.customEvents[eventName]){
-                        com.customEvents[eventName].apply(com,[args[1]])
+                        that.$name = that.$vnode.tag.replace(/.*\d+\-(.*)/,'$1');
+                        var event = {
+                            active:true,
+                            name:eventName,
+                            source:that,
+                            type:'emit'
+                        }
+                        com.customEvents[eventName].apply(com,[args[1],event])
                     }
                 }
             })

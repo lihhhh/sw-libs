@@ -2,7 +2,7 @@
 @author: lih
 -->
 <template>
-    <popup-picker :title="title" :placeholder='placeholder' @on-change='onChange' :value-text-align='valueTextAlign' :data="data" :columns="columns" v-model="value" show-name></popup-picker>
+    <popup-picker :title="title" :placeholder='placeholder' @on-change='onChange' :value-text-align='valueTextAlign' :data="data" :columns="columns" v-model="value" :show-name="showName"></popup-picker>
 </template>
 <script>
 import { PopupPicker } from "vux";
@@ -16,6 +16,7 @@ export default {
       title: "",
       value: [],
       data: [],
+      showName:false,// 数组对象 属性有name 才能设置true
       columns: 1 //列数
     };
   },
@@ -49,17 +50,7 @@ export default {
         if (Array.isArray(range) && this.mode == "selector") {
           this.data = range;
         }
-
-        // 转化为数组对象  
-        this.data = this.data.map(it=>{
-            if(typeof it == 'string'){
-                return {
-                    name:it,
-                    value:it
-                }
-            }
-            return it;
-        })
+    
       },
       deep: true,
       immediate:true
@@ -84,7 +75,10 @@ export default {
           value: value,
           postcode: ""
         };
+      }else if(this.mode == 'selector'){
+          data = this.data.indexOf(code[0])
       }
+      
       this.$emit("change", {
         detail: data
       });
@@ -94,6 +88,7 @@ export default {
     if (this.mode == "region") {
       this.data = area;
       this.columns = 3;
+      this.showName = true;
     }
   }
 };
