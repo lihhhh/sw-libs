@@ -245,15 +245,17 @@ var web = {
             })
         },
         $emit: function (eventName) {
+            var args = Array.prototype.slice.call(arguments);
+
             deep.call(this, '$parent', function (com) {
                 if (com && com.$vnode && com.$vnode.tag.indexOf('wepy-') === -1) {
                     if(com.customEvents&&com.customEvents[eventName]){
-                        com.customEvents[eventName].apply(com,args)
+                        com.customEvents[eventName].apply(com,[args[1]])
                     }
                 }
             })
             
-            var args = Array.prototype.slice.call(arguments);
+            
             this.$$emit.apply(this, args)
         },
         $getParent: function () {

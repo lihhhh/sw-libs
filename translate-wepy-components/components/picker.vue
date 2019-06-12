@@ -2,7 +2,7 @@
 @author: lih
 -->
 <template>
-    <popup-picker :title="title" :placeholder='placeholder' @on-change='onChange' value-text-align='left' :data="list3" :columns="3" v-model="value" show-name></popup-picker>
+    <popup-picker :title="title" :placeholder='placeholder' @on-change='onChange' :value-text-align='valueTextAlign' :data="data" :columns="columns" v-model="value" show-name></popup-picker>
 </template>
 <script>
 import { PopupPicker } from "vux";
@@ -15,7 +15,8 @@ export default {
       isHover: false,
       title: "",
       value: [],
-      list3: area
+      data: [],
+      columns: 1 //列数
     };
   },
 
@@ -24,6 +25,10 @@ export default {
   },
 
   props: {
+    "value-text-align": {
+      type: String,
+      default: "right"
+    },
     placeholder: {
       type: String,
       default: "请选择"
@@ -31,6 +36,33 @@ export default {
     mode: {
       type: String,
       default: "selector" //region|time|date|multiSelector|selector
+    },
+    range: {
+      type: Array,
+      default: () => []
+    }
+  },
+
+  watch: {
+    range: {
+      handler(range) {
+        if (Array.isArray(range) && this.mode == "selector") {
+          this.data = range;
+        }
+
+        // 转化为数组对象  
+        this.data = this.data.map(it=>{
+            if(typeof it == 'string'){
+                return {
+                    name:it,
+                    value:it
+                }
+            }
+            return it;
+        })
+      },
+      deep: true,
+      immediate:true
     }
   },
 
@@ -58,7 +90,12 @@ export default {
       });
     }
   },
-  created() {}
+  created() {
+    if (this.mode == "region") {
+      this.data = area;
+      this.columns = 3;
+    }
+  }
 };
 </script>
 <style lang="less">
