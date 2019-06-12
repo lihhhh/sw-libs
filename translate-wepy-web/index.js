@@ -164,6 +164,24 @@ var web = {
             getSystemInfoSync: function () {
                 var res = that.$wx.getSystemInfoSync()
                 return res;
+            },
+            chooseImage: function(options){
+                var {success} = options;
+                that.$Vue.app.store.commit('actionsheet',{
+                    show:true,
+                    menus: [{
+                        name:'拍照',
+                        file:false
+                    },{
+                        name:'打开相册',
+                        file:true
+                    }],
+                    success(data){
+                        that.$Vue.app.store.commit('actionsheet',{show:false})
+                        typeof success === 'function' && success(data);
+                    }
+                })
+                // typeof success === 'function' && success();
             }
         };
     },
