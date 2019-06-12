@@ -231,11 +231,16 @@ var web = {
             })
         }, 300),
         $invoke: function (componentName, methodName, params) {
-            var reg = new RegExp(`${componentName}$`);
+            var reg = new RegExp(`\\d-${componentName}$`);
             
             deep.call(this, '$children', function (com) {
                 if (reg.test(com.$vnode.tag)) {
-                    com[methodName](params)
+                    console.log(com.$vnode.tag)
+                    if(typeof com[methodName] == 'function'){
+                        com[methodName](params)
+                    }else {
+                        throw "$invoke error:请检查 "+methodName+'方法是否存在'
+                    }
                 }
             })
         },
