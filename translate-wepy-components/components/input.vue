@@ -1,6 +1,6 @@
 <template>
   <!-- <x-input title="title" v-model="inputVal"></x-input> -->
-  <input v-model="inputVal" autocomplete="off" @input="change">
+  <input v-model="inputVal" autocomplete="off" @input="change" @keyup='keyUp'>
 </template>
 <script>
 export default {
@@ -25,6 +25,12 @@ export default {
     };
   },
   methods: {
+    keyUp(e){
+      var keycode = e.keyCode;
+      if(keycode == 13){
+        this.$emit('confirm',e)
+      }
+    },
     change(event) {
       // this.inputVal = event.target.value;
       this.$emit("input", {

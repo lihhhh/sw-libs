@@ -1,11 +1,6 @@
 <template>
-  <div
-    ref="element"
-    class="wepy-scroll-view"
-    :style="getStyle"
-    @touchstart="touchStart"
-  >
-    <div>
+  <div ref="element" class="wepy-scroll-view" :style="getStyle" @touchstart="touchStart">
+    <div ref='scroll-box'>
       <slot></slot>
     </div>
   </div>
@@ -32,11 +27,11 @@ let TABLE_OPTIONS = {
     default: 50
   },
   "scroll-top": {
-    type: [Number,String],
+    type: [Number, String],
     default: 0
   },
   "scroll-left": {
-    type: [Number,String],
+    type: [Number, String],
     default: 0
   },
   "scroll-into-view": {
@@ -65,9 +60,9 @@ export default {
   },
   data() {
     var scX = this.scrollX;
-    scX = scX===''?true:scX;
+    scX = scX === "" ? true : scX;
     var scY = this.scrollY;
-    scY = scY===''?true:scY;
+    scY = scY === "" ? true : scY;
     return {
       BScroll: {},
       scX: scX,
@@ -86,52 +81,64 @@ export default {
     }
   },
   methods: {
-    touchStart(){
-      console.log('刷新scroll')
+    touchStart() {
+      console.log("刷新scroll");
       // 此方法不调用 不会触发第二次上拉加载事件
-      this.BScroll.finishPullUp()
-      this.BScroll.refresh()
+      this.BScroll.finishPullUp();
+      this.BScroll.refresh();
+    },
+    /**
+     * 获取可滚动长度
+     * x|y
+     */
+    scrollLong(fx) {
+      if (fx == "x") {
+        var visible = this.$refs["element"].offsetWidth;
+        var all = this.$refs["scroll-box"].offsetWidth;
+      }else{
+        var visible = this.$refs["element"].offsetHeight;
+        var all = this.$refs["scroll-box"].offsetHeight;
+      }
+
+      return all-visible;
     }
   },
   watch: {
-    scrollLeft(value,oldValue){
-      var vl = String(value).replace(/[^\d]/g,'')
-      var oldVl = String(oldValue).replace(/[^\d]/g,'')
-
-      if(/\dpx/.test(value)){
-      }else{
-        vl = vl/2;
+    scrollLeft(value, oldValue) {
+      var scroll = this.scrollLong('x');
+      var vl = String(value).replace(/[^\d]/g, "");
+      if (/\dpx/.test(value)) {
+      } else {
+        vl = vl / 2;
       }
 
-      vl =  vl - oldVl*1;
+      vl = vl>scroll?scroll:vl;
 
-      console.log('横行滚动',vl)
-      this.BScroll.scrollBy(-vl,0,300);
-
+      console.log("横行滚动", vl);
+      this.BScroll.scrollTo(-vl, 0, 300);
     },
-    scrollTop(value,oldValue){
-      var vl = String(value).replace(/[^\d]/g,'')
-      var oldVl = String(oldValue).replace(/[^\d]/g,'')
+    scrollTop(value, oldValue) {
+      var scroll = this.scrollLong('y');
+      var vl = String(value).replace(/[^\d]/g, "");
 
-      if(/\dpx/.test(value)){
-      }else{
-        vl = vl/2;
+      if (/\dpx/.test(value)) {
+      } else {
+        vl = vl / 2;
       }
 
-      vl =  vl - oldVl*1;
+      vl = vl>scroll?scroll:vl;
 
-      console.log('横行滚动',vl)
-      this.BScroll.scrollBy(0,-vl,300);
-
+      console.log("纵向滚动", vl);
+      this.BScroll.scrollTo(0, -vl, 300);
     },
     scrollIntoView(value) {
-      this.BScroll.refresh()
+      this.BScroll.refresh();
       if (this.scY) {
         var offsetTop = this.$el.querySelector("#" + value).offsetTop;
-        this.BScroll.scrollTo(0, -offsetTop,300);
+        this.BScroll.scrollTo(0, -offsetTop, 300);
       } else if (this.scX) {
         var offsetLeft = this.$el.querySelector("#" + value).offsetLeft;
-        this.BScroll.scrollTo(-offsetLeft,0,300);
+        this.BScroll.scrollTo(-offsetLeft, 0, 300);
       }
     }
   },
@@ -150,7 +157,7 @@ export default {
     if (this.scY) {
       options.scrollY = true;
     }
-    
+
     this.BScroll = new BScroll(this.$refs["element"], options);
 
     this.BScroll.on("scroll", e => {
@@ -158,13 +165,13 @@ export default {
         detail: {
           scrollTop: Math.abs(parseFloat(e.y))
         },
-        currentTarget: e.currentTarget || {dataset:{}}
+        currentTarget: e.currentTarget || { dataset: {} }
       };
       this.$emit("scroll", evt);
     });
 
     this.BScroll.on("pullingUp", e => {
-      console.log('事件触发---------> 滚动触底')
+      console.log("事件触发---------> 滚动触底");
       var evt = {};
       this.$emit("scrolltolower", evt);
     });
