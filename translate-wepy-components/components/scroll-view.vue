@@ -95,8 +95,8 @@ export default {
   },
   watch: {
     scrollLeft(value,oldValue){
-      var vl = value.replace(/[^\d]/g,'')
-      var oldVl = oldValue.replace(/[^\d]/g,'')
+      var vl = String(value).replace(/[^\d]/g,'')
+      var oldVl = String(oldValue).replace(/[^\d]/g,'')
 
       if(/\dpx/.test(value)){
       }else{
@@ -110,8 +110,8 @@ export default {
 
     },
     scrollTop(value,oldValue){
-      var vl = value.replace(/[^\d]/g,'')
-      var oldVl = oldValue.replace(/[^\d]/g,'')
+      var vl = String(value).replace(/[^\d]/g,'')
+      var oldVl = String(oldValue).replace(/[^\d]/g,'')
 
       if(/\dpx/.test(value)){
       }else{

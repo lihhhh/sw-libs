@@ -170,9 +170,6 @@ var web = {
                 that.$Vue.app.store.commit('actionsheet',{
                     show:true,
                     menus: [{
-                        name:'拍照',
-                        file:false
-                    },{
                         name:'打开相册',
                         file:true
                     }],
@@ -181,7 +178,6 @@ var web = {
                         typeof success === 'function' && success(data);
                     }
                 })
-                // typeof success === 'function' && success();
             }
         };
     },

@@ -34,7 +34,8 @@ var tags = ['form',
 	'repeat',
 	'input',
 	'picker',
-	'textarea'
+	'textarea',
+	'rich-text'
 ];
 
 

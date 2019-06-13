@@ -104,6 +104,7 @@ export default {
     },
     methods: {
         onload (e) {
+            if(!this.img) return ;
             let height = this.img.naturalHeight;
             let width = this.img.naturalWidth;
             let evt = new event('system', this.$parent.$wepy, 'bindload');

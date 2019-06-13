@@ -20,6 +20,7 @@ import checkboxGroup from './components/checkbox-group.vue';
 import form from './components/form.vue';
 import picker from './components/picker.vue';
 import textarea from './components/textarea.vue';
+import richText from './components/rich-text.vue';
 
 const before = 'wepy-';
 
@@ -45,5 +46,6 @@ export default {
         Vue.component(before+'form',form);
         Vue.component(before+'picker',picker);
         Vue.component(before+'textarea',textarea);
+        Vue.component(before+'rich-text',richText);
     }
 }
